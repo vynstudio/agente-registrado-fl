@@ -1,7 +1,7 @@
 // Turns on "Continue with Google" for the admin login in one run:
-//   1. asks for a Supabase access token (hidden): https://supabase.com/dashboard/account/tokens,
+//   1. reads a Supabase access token from the clipboard: https://supabase.com/dashboard/account/tokens,
 //      signed in with the account that owns this project
-//   2. asks for the Google OAuth client secret (hidden), from the "Agente Registrado admin login"
+//   2. reads the Google OAuth client secret from the clipboard, from the "Agente Registrado admin login"
 //      client in Google Cloud (project toro-admin-login)
 //   3. enables the Google provider and adds the site's addresses to the allowed redirect URLs,
 //      keeping the existing ones
@@ -9,32 +9,28 @@
 //
 //   node migration/connect-google-login.ts
 import { createInterface } from "node:readline";
-import { Writable } from "node:stream";
+import { execFileSync } from "node:child_process";
 
 const PROJECT_REF = "ofitimdebbncfdhvxwub";
 const GOOGLE_CLIENT_ID = "2476420386-3v7gmdeji1p9l70dmbg062ngbr7r65g0.apps.googleusercontent.com";
 const SITE_URL = "https://agenteregistradofl.com";
 const REDIRECTS = ["https://agenteregistradofl.com/**", "http://localhost:8081/**"];
 
-let muted = false;
-const echo = new Writable({ write: (chunk, _enc, done) => { if (!muted) process.stdout.write(chunk); done(); } });
-const rl = createInterface({ input: process.stdin, output: echo, terminal: true });
-async function askHidden(question: string): Promise<string> {
-  process.stdout.write(question);
-  muted = true;
-  const answer = await new Promise<string>((resolve) => rl.question("", resolve));
-  muted = false;
-  process.stdout.write("\n");
-  return answer.trim();
+// Reads each key from the clipboard when Enter is pressed, so nothing has to be pasted into the terminal.
+const rl = createInterface({ input: process.stdin, output: process.stdout });
+async function fromClipboard(what: string, valid: (v: string) => boolean): Promise<string> {
+  for (;;) {
+    await new Promise<string>((resolve) => rl.question(`Copy the ${what}, then press Enter here: `, resolve));
+    const value = execFileSync("pbpaste").toString().trim();
+    if (valid(value)) { console.log(`  Got it (${value.length} characters).`); return value; }
+    console.log(`  The clipboard doesn't hold the ${what} yet. Copy it and press Enter again.`);
+  }
 }
 
-const token = await askHidden("Paste your Supabase access token (hidden) and press Enter: ");
-const secret = await askHidden("Paste the Google client secret (hidden, starts with GOCSPX-) and press Enter: ");
+const token = await fromClipboard("Supabase access token (starts with sbp_)", (v) => v.startsWith("sbp_"));
+const secret = await fromClipboard("Google client secret (starts with GOCSPX-)", (v) => v.startsWith("GOCSPX-"));
 rl.close();
-if (!token || !secret.startsWith("GOCSPX-")) {
-  console.error("Missing token, or that doesn't look like a Google client secret (GOCSPX-...).");
-  process.exit(1);
-}
+execFileSync("pbcopy", { input: "" }); // clear the secret from the clipboard
 
 const api = async (method: string, body?: unknown) => {
   const res = await fetch(`https://api.supabase.com/v1/projects/${PROJECT_REF}/config/auth`, {
