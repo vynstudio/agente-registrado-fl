@@ -348,6 +348,7 @@ export const translations: Record<string, T> = {
   "The article you're looking for doesn't exist or has been removed.": { es: "El artículo que busca no existe o fue eliminado.", pt: "O artigo que você procura não existe ou foi removido." },
   "Back to blog": { es: "Volver al blog", pt: "Voltar ao blog" },
   "min read": { es: "min de lectura", pt: "min de leitura" },
+  "On this page": { es: "En esta página", pt: "Nesta página" },
   "Oops! Page not found": { es: "¡Uy! Página no encontrada", pt: "Ops! Página não encontrada" },
   "Page not found": { es: "Página no encontrada", pt: "Página não encontrada" },
   "Florida LLC and corporation formation, EIN and registered agent": { es: "Formación de LLC y corporaciones en Florida, EIN y agente registrado", pt: "Abertura de LLC e corporação na Flórida, EIN e agente registrado" },

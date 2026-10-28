@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { type StripeEnv, verifyWebhook } from "../_shared/stripe.ts";
 import { ADMIN_ORDERS_URL, money, sendAlert } from "../_shared/alerts.ts";
+import { sendOrderConfirmation } from "../_shared/client-email.ts";
 
 let _db: SupabaseClient | null = null;
 const db = () => (_db ??= createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!));
@@ -14,9 +15,10 @@ async function setStatus(session: any, env: StripeEnv, status: string) {
     .update({ status, ...(status === "paid" && { paid_at: new Date().toISOString() }) })
     .eq("id", orderId).eq("environment", env).neq("status", status)
     .select("*").maybeSingle();
-  // Only on the change to "paid" (Stripe may resend an event), so each new client alerts once.
+  // Only on the change to "paid" (Stripe may resend an event), so each new client alerts once
+  // and gets one confirmation email.
   if (order && status === "paid") {
-    await sendAlert(`${env === "sandbox" ? "[TEST] " : ""}✅ New client — order paid`, [
+    await Promise.all([sendOrderConfirmation(order), sendAlert(`${env === "sandbox" ? "[TEST] " : ""}✅ New client — order paid`, [
       ["Company", order.company_name],
       ["Package", `${PLAN_NAMES[order.plan] ?? order.plan} · ${order.entity_type === "llc" ? "LLC" : "Corporation"}`],
       ["Add-ons", order.extras?.join(", ")],
@@ -27,7 +29,7 @@ async function setStatus(session: any, env: StripeEnv, status: string) {
       ["Language", order.language?.toUpperCase()],
       ["EIN", order.ein ? (order.ein.taxId === "none" ? "yes (no SSN/ITIN)" : `yes — call client for ${order.ein.taxId.toUpperCase()}`) : undefined],
       ["Details", ADMIN_ORDERS_URL],
-    ]);
+    ])]);
   }
 }
 

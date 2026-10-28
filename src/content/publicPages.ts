@@ -34,37 +34,38 @@ export const publicPages = {
   },
   "privacy": {
     "title": "Privacy policy",
-    "intro": "Diler Services, LLC operates Florida Registered Agent. This draft notice describes the information requested by the website; final privacy practices and contact details are pending confirmation.",
+    "updated": "Updated October 27, 2026",
+    "intro": "Diler Services, LLC operates Florida Registered Agent. This policy explains what information we collect on agenteregistradofl.com, how we use it and who we share it with.",
     "sections": [
       {
         "title": "Information you provide",
         "paragraphs": [
-          "The order form requests company names, business purpose, owner names and ownership percentages, contact name, email, phone, country and mailing address. The contact form receives the information you submit. Please do not enter Social Security numbers, passport details, card numbers or confidential documents in the contact form or AI advisor."
+          "The order form asks for your company details (name, address, management and business activity), the name, role, ownership and address of each owner, manager or officer, and your contact name, email, phone and country. The contact form receives the information you submit. Please do not enter Social Security numbers, passport details, card numbers or confidential documents in the contact form or AI advisor."
         ]
       },
       {
         "title": "Orders, payments and AI",
         "paragraphs": [
-          "Order information is used to prepare requested services and communicate about your order. When Stripe payments are connected, Stripe processes checkout information under its own privacy policy. Descriptions submitted to the AI advisor are sent to Lovable AI Gateway for a recommendation. Avoid sensitive information in those descriptions.",
+          "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments under its own privacy policy; we never see or store your full card number. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.",
           "When you authorize a filing at checkout, we save your typed name, the date and time, your IP address and browser type as a record of your authorization. We never ask for Social Security numbers or ITINs on the website; if one is needed for an EIN application, we get it from you by phone and do not store it."
         ]
       },
       {
         "title": "Public records and referrals",
         "paragraphs": [
-          "Information included in Florida filings may become public through Sunbiz. Registered agent service does not make all company information private. Any sharing of client details with partner professionals, including the permission process, must be confirmed before this policy is finalized."
+          "Information included in Florida filings, such as company names, addresses and the names of managers or officers, becomes public on Sunbiz. Registered agent service puts our address on the record for legal notices, but it does not make all company information private. We share your details with partner accountants or attorneys only when you ask us to refer you."
         ]
       },
       {
-        "title": "Preferences, advertising and retention",
+        "title": "Service providers, cookies and retention",
         "paragraphs": [
-          "The site saves your selected language in browser storage. Advertising trackers, analytics, retention periods and deletion procedures have not yet been confirmed by the business owner. This draft does not claim a specific retention period or that personal information is never shared or sold."
+          "We use service providers to run the site: Cloudflare (hosting and email), Supabase (database), Stripe (payments), Anthropic (AI advisor) and Telegram (order notifications to our staff). The site saves your selected language in your browser and does not use advertising or analytics cookies. We do not sell your personal information. We keep order records as long as needed to provide your services and to meet legal, tax and accounting record-keeping requirements, and contact messages as long as needed to answer them."
         ]
       },
       {
         "title": "Privacy questions",
         "paragraphs": [
-          "Use our contact page for privacy questions without submitting sensitive information. A dedicated privacy email, business mailing address and final rights-request process must be added before treating this notice as a finalized policy."
+          "For privacy questions, or to ask for a copy, correction or deletion of your information, call us at (863) 450-1800 or use our contact page. Do not send sensitive information through the contact form. We may keep information we are required by law to retain."
         ]
       }
     ],
@@ -74,7 +75,7 @@ export const publicPages = {
         "href": "/contact"
       }
     ],
-    "draft": true
+    "draft": false
   },
   "florida-llc-vs-corporation": {
     "title": "Florida LLC vs corporation",
@@ -269,7 +270,7 @@ export const publicPages = {
         "href": "/contact"
       }
     ],
-    "draft": true
+    "draft": false
   },
   "refund-policy": {
     "title": "Refund policy",
@@ -330,6 +331,6 @@ export const publicPages = {
         "href": "/contact"
       }
     ],
-    "draft": true
+    "draft": false
   }
 };

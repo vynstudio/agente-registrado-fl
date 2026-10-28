@@ -3,7 +3,7 @@
 // - Writes each page's Spanish title, description, canonical link and structured data into the
 //   HTML, so search engines and link previews see them without running JavaScript.
 // - Answers unknown addresses with a real 404 and keeps private pages out of search results.
-// - Emails owner alerts sent by the Supabase functions (worker/alert-email.js).
+// - Emails owner alerts and client order confirmations sent by the Supabase functions (worker/alert-email.js).
 // - When MAINTENANCE is "on", visitors to the public domain get a "back soon" page
 //   (HTTP 503, so search engines keep the site indexed); the *.workers.dev preview
 //   keeps serving the real site so we can keep testing.
@@ -12,7 +12,7 @@ import { faqs } from "../src/content/faqs";
 import { translations } from "../src/i18n/translations";
 import { PHONE } from "../src/lib/contact";
 import { maintenancePage } from "./maintenance";
-import { alertEmail } from "./alert-email";
+import { alertEmail, clientEmail } from "./alert-email";
 
 const ORIGIN = "https://agenteregistradofl.com";
 const PUBLIC_HOSTS = new Set(["agenteregistradofl.com", "www.agenteregistradofl.com"]);
@@ -103,6 +103,7 @@ export default {
       return Response.redirect(`${ORIGIN}${url.pathname}${url.search}`, 301);
     }
     if (url.pathname === "/api/alert-email") return alertEmail(request, env);
+    if (url.pathname === "/api/client-email") return clientEmail(request, env);
     if (env.MAINTENANCE === "on" && publicHost) return maintenancePage();
 
     // Google Search Console ownership file: served at its exact .html address (no redirect).

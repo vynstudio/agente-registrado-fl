@@ -45,3 +45,29 @@ export async function alertEmail(request, env) {
   if (failed.length) console.error("Alert email failed", failed);
   return new Response(failed.length === recipients.length ? "failed" : "sent", { status: failed.length === recipients.length ? 502 : 200 });
 }
+
+// POST /api/client-email: order confirmations to clients (supabase/functions/_shared/client-email.ts).
+// Clients are not verified destinations, so this uses Cloudflare Email Sending (Workers Paid plan,
+// agenteregistradofl.com onboarded for sending) through the CLIENT_EMAIL binding. Until that binding
+// exists it answers 503 and the order goes on without the email.
+const CLIENT_FROM = "pedidos@agenteregistradofl.com";
+const REPLY_TO = "hello@toromovers.com";
+
+export async function clientEmail(request, env) {
+  if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
+  if (!sameSecret(request.headers.get("x-alert-secret"), env.ALERT_SECRET)) return new Response("Forbidden", { status: 403 });
+  if (!env.CLIENT_EMAIL) return new Response("Client email not configured", { status: 503 });
+  const { to, fromName, subject, text } = await request.json().catch(() => ({}));
+  const valid = typeof to === "string" && /^[^\s@<>]+@[^\s@<>]+\.[a-z]{2,}$/i.test(to) && to.length <= 255
+    && typeof fromName === "string" && fromName.length <= 100
+    && typeof subject === "string" && subject && subject.length <= 200
+    && typeof text === "string" && text.length <= 10000;
+  if (!valid) return new Response("Bad request", { status: 400 });
+  try {
+    await env.CLIENT_EMAIL.send({ to, from: { email: CLIENT_FROM, name: fromName }, replyTo: REPLY_TO, subject, text });
+    return new Response("sent");
+  } catch (e) {
+    console.error("Client email failed", e.code, e.message);
+    return new Response("failed", { status: 502 });
+  }
+}

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useLang, LOCALES } from "@/i18n/LanguageContext";
+import { useLang, LOCALES, BRAND } from "@/i18n/LanguageContext";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import {
   Popover,
@@ -18,107 +18,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-// Author profile images
-import authorSarah from "@/assets/author-sarah.jpg";
-import authorMarcus from "@/assets/author-marcus.jpg";
-import authorEmily from "@/assets/author-emily.jpg";
-import authorDavid from "@/assets/author-david.jpg";
-
-// Blog post featured images - specific topics
-import blogHealthcareAi from "@/assets/blog-healthcare-ai.jpg";
-import blogFutureWork from "@/assets/blog-future-work.jpg";
-import blogSustainableAi from "@/assets/blog-sustainable-ai.jpg";
-import blogRealtimeAi from "@/assets/blog-realtime-ai.jpg";
-import blogDeepLearning from "@/assets/blog-deep-learning.jpg";
-import blogAutomation from "@/assets/blog-automation.jpg";
-import blogCybersecurity from "@/assets/blog-cybersecurity.jpg";
-import blogCloud from "@/assets/blog-cloud.jpg";
-import blogNlp from "@/assets/blog-nlp.jpg";
-import blogGenerativeAi from "@/assets/blog-generative-ai.jpg";
-import blogPrivacy from "@/assets/blog-privacy.jpg";
-import blogVision from "@/assets/blog-vision.jpg";
-import blogMl from "@/assets/blog-ml.jpg";
-import blogScalable from "@/assets/blog-scalable.jpg";
-import blogEthics from "@/assets/blog-ethics.jpg";
-import blogInnovation from "@/assets/blog-innovation.jpg";
-import blogAnalytics from "@/assets/blog-analytics.jpg";
-import blogBestPractices from "@/assets/blog-best-practices.jpg";
-// Generic AI images for variety
-import blogAi1 from "@/assets/blog-ai-1.jpg";
-import blogAi2 from "@/assets/blog-ai-2.jpg";
-import blogAi3 from "@/assets/blog-ai-3.jpg";
-import blogAi4 from "@/assets/blog-ai-4.jpg";
-import blogAi5 from "@/assets/blog-ai-5.jpg";
-import blogAi6 from "@/assets/blog-ai-6.jpg";
-
-// Author data
-const authors = [
-  { name: "Sarah Mitchell", image: authorSarah },
-  { name: "Marcus Chen", image: authorMarcus },
-  { name: "Emily Wong", image: authorEmily },
-  { name: "David Brooks", image: authorDavid },
-];
-
-// Get author based on post index for consistent assignment
-const getAuthor = (index: number) => authors[index % authors.length];
-
-// Generic AI images pool for titles without specific matches
-const genericAiImages = [
-  blogAi1, blogAi2, blogAi3, blogAi4, blogAi5, blogAi6,
-  blogInnovation, blogScalable, blogMl, blogAnalytics
-];
-
-// Simple hash function to get consistent image per title
-const hashTitle = (title: string): number => {
-  let hash = 0;
-  for (let i = 0; i < title.length; i++) {
-    const char = title.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash);
-};
-
-// Specific keyword to image mapping (only for very specific matches)
-const specificImageMap: Record<string, string> = {
-  "healthcare": blogHealthcareAi,
-  "patient care": blogHealthcareAi,
-  "future of work": blogFutureWork,
-  "human collaboration": blogFutureWork,
-  "sustainable": blogSustainableAi,
-  "green computing": blogSustainableAi,
-  "real-time": blogRealtimeAi,
-  "realtime": blogRealtimeAi,
-  "deep learning": blogDeepLearning,
-  "predictive analytics": blogDeepLearning,
-  "automation strategies": blogAutomation,
-  "cybersecurity": blogCybersecurity,
-  "cloud computing": blogCloud,
-  "natural language processing": blogNlp,
-  "generative ai": blogGenerativeAi,
-  "data privacy": blogPrivacy,
-  "computer vision": blogVision,
-  "machine learning fundamentals": blogMl,
-  "ethics of ai": blogEthics,
-  "best practices for ai": blogBestPractices,
-  "industry report": blogAnalytics,
-};
-
-// Get fallback image based on title - specific match first, then hash-based selection
-const getFallbackImage = (title: string): string => {
-  const lowerTitle = title.toLowerCase();
-  
-  // Check for specific matches first
-  for (const [keyword, image] of Object.entries(specificImageMap)) {
-    if (lowerTitle.includes(keyword)) {
-      return image;
-    }
-  }
-  
-  // Use hash-based selection for consistent but varied images
-  const hash = hashTitle(title);
-  return genericAiImages[hash % genericAiImages.length];
-};
+// Posts are written by the business itself: its logo and name stand in as the author, and posts
+// without their own image show the Miami skyline.
+import { BLOG_AUTHOR_IMAGE, BLOG_FALLBACK_IMAGE } from "@/lib/blog";
 // Sanitize search input to prevent abuse and improve defense-in-depth
 const sanitizeSearchQuery = (query: string): string => {
   const maxLength = 100;
@@ -130,6 +32,7 @@ const sanitizeSearchQuery = (query: string): string => {
 const Blog = () => {
   const { t, lang } = useLang();
   usePageTitle("Florida business formation guides");
+  const author = { name: BRAND[lang], image: BLOG_AUTHOR_IMAGE };
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -343,7 +246,7 @@ const Blog = () => {
               {latestPosts[0] && <Link to={`/blog/${latestPosts[0].slug}`} className="group h-full">
                   <div className="bg-muted rounded-2xl overflow-hidden h-full p-2 flex flex-col">
                     <div className="flex-1 min-h-0 overflow-hidden rounded-xl">
-                      <img src={latestPosts[0].featured_image_url || getFallbackImage(latestPosts[0].title)} alt={latestPosts[0].title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <img src={latestPosts[0].featured_image_url || BLOG_FALLBACK_IMAGE} alt={latestPosts[0].title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     </div>
                     <div className="bg-background rounded-xl p-4 mt-2 flex-shrink-0">
                       <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
@@ -355,12 +258,12 @@ const Blog = () => {
                         <div className="flex items-center justify-between">
                         <div className="flex items-center gap-[8px]">
                           <img 
-                            src={getAuthor(0).image} 
-                            alt={getAuthor(0).name}
+                            src={author.image} 
+                            alt={author.name}
                             className="w-8 h-8 rounded-full object-cover"
                           />
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="font-medium text-foreground">{getAuthor(0).name}</span>
+                            <span className="font-medium text-foreground">{author.name}</span>
                             <span>•</span>
                             <span>{latestPosts[0].published_at && formatDate(latestPosts[0].published_at)}</span>
                           </div>
@@ -380,7 +283,7 @@ const Blog = () => {
                 {latestPosts.slice(1, 3).map((post, idx) => <Link key={post.id} to={`/blog/${post.slug}`} className="group flex-1">
                     <div className="flex flex-col sm:flex-row bg-muted rounded-2xl overflow-hidden p-2 gap-2 h-full">
                       <div className="w-full sm:w-48 md:w-64 h-[160px] sm:h-[200px] flex-shrink-0 overflow-hidden rounded-xl">
-                        <img src={post.featured_image_url || getFallbackImage(post.title)} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img src={post.featured_image_url || BLOG_FALLBACK_IMAGE} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
                       <div className="flex flex-col justify-between flex-1 bg-background rounded-xl p-3">
                         <div>
@@ -394,12 +297,12 @@ const Blog = () => {
                         <div className="flex items-center justify-between flex-wrap gap-2">
                           <div className="flex items-center gap-[8px]">
                             <img 
-                              src={getAuthor(idx + 1).image} 
-                              alt={getAuthor(idx + 1).name}
+                              src={author.image} 
+                              alt={author.name}
                               className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover"
                             />
                             <div className="flex items-center gap-1 sm:gap-2 text-xs text-muted-foreground">
-                              <span className="font-medium text-foreground">{getAuthor(idx + 1).name}</span>
+                              <span className="font-medium text-foreground">{author.name}</span>
                               <span>•</span>
                               <span>{post.published_at && formatDate(post.published_at)}</span>
                             </div>
@@ -447,8 +350,8 @@ const Blog = () => {
                     </div>
                     {/* Author Avatar */}
                     <img 
-                      src={getAuthor(index + 3).image} 
-                      alt={getAuthor(index + 3).name}
+                      src={author.image} 
+                      alt={author.name}
                       className="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1"
                     />
                   </div>
@@ -483,7 +386,7 @@ const Blog = () => {
                     <div className="bg-muted rounded-2xl p-2 h-full flex flex-col">
                       {/* Image */}
                       <div className="aspect-[4/3] overflow-hidden rounded-xl">
-                        <img src={post.featured_image_url || getFallbackImage(post.title)} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img src={post.featured_image_url || BLOG_FALLBACK_IMAGE} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
                       
                       {/* Content */}
@@ -499,12 +402,12 @@ const Blog = () => {
                         <div className="flex items-center justify-between gap-2 flex-wrap">
                           <div className="flex items-center gap-2">
                             <img 
-                              src={getAuthor(index + 3).image} 
-                              alt={getAuthor(index + 3).name}
+                              src={author.image} 
+                              alt={author.name}
                               className="w-7 h-7 rounded-full object-cover"
                             />
                             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span className="font-medium text-foreground">{getAuthor(index + 3).name}</span>
+                              <span className="font-medium text-foreground">{author.name}</span>
                               <span>•</span>
                               <span>{post.published_at && formatDate(post.published_at)}</span>
                             </div>
@@ -556,8 +459,8 @@ const Blog = () => {
                     
                     {/* Author Avatar */}
                     <img 
-                      src={getAuthor(index + 9).image} 
-                      alt={getAuthor(index + 9).name}
+                      src={author.image} 
+                      alt={author.name}
                       className="w-10 h-10 rounded-full object-cover border-2 border-background"
                     />
                   </Link>

@@ -43,49 +43,49 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Política de privacidad",
     "pt": "Política de privacidade"
   },
-  "Diler Services, LLC operates Florida Registered Agent. This draft notice describes the information requested by the website; final privacy practices and contact details are pending confirmation.": {
-    "es": "Diler Services, LLC opera Agente Registrado Florida. Este aviso provisional describe los datos solicitados en el sitio; las prácticas definitivas y los datos de contacto están pendientes de confirmación.",
-    "pt": "Diler Services, LLC opera Agente Registrado da Flórida. Este aviso provisório descreve os dados solicitados pelo site; as práticas definitivas e os dados de contato aguardam confirmação."
+  "Diler Services, LLC operates Florida Registered Agent. This policy explains what information we collect on agenteregistradofl.com, how we use it and who we share it with.": {
+    "es": "Diler Services, LLC opera Agente Registrado Florida. Esta política explica qué información recopilamos en agenteregistradofl.com, cómo la usamos y con quién la compartimos.",
+    "pt": "Diler Services, LLC opera Agente Registrado da Flórida. Esta política explica quais informações coletamos em agenteregistradofl.com, como as usamos e com quem as compartilhamos."
   },
   "Information you provide": {
     "es": "Información que proporciona",
     "pt": "Informações que você fornece"
   },
-  "The order form requests company names, business purpose, owner names and ownership percentages, contact name, email, phone, country and mailing address. The contact form receives the information you submit. Please do not enter Social Security numbers, passport details, card numbers or confidential documents in the contact form or AI advisor.": {
-    "es": "El formulario de pedido solicita nombres de empresa, actividad, nombres y porcentajes de los propietarios, nombre de contacto, correo, teléfono, país y dirección postal. El formulario de contacto recibe los datos que envía. No incluya números de Seguro Social, datos de pasaporte, tarjetas ni documentos confidenciales en el formulario de contacto o asesor de IA.",
-    "pt": "O formulário de pedido solicita nomes da empresa, atividade, nomes e participações dos sócios, nome de contato, e-mail, telefone, país e endereço. O formulário de contato recebe os dados enviados. Não informe números de seguridade social, passaportes, cartões ou documentos confidenciais no formulário de contato ou assistente de IA."
+  "The order form asks for your company details (name, address, management and business activity), the name, role, ownership and address of each owner, manager or officer, and your contact name, email, phone and country. The contact form receives the information you submit. Please do not enter Social Security numbers, passport details, card numbers or confidential documents in the contact form or AI advisor.": {
+    "es": "El formulario de pedido solicita los datos de su empresa (nombre, dirección, administración y actividad), el nombre, cargo, participación y dirección de cada propietario, gerente o directivo, y su nombre de contacto, correo, teléfono y país. El formulario de contacto recibe los datos que usted envía. No incluya números de Seguro Social, datos de pasaporte, tarjetas ni documentos confidenciales en el formulario de contacto ni en el asesor de IA.",
+    "pt": "O formulário de pedido solicita os dados da sua empresa (nome, endereço, administração e atividade), o nome, cargo, participação e endereço de cada sócio, administrador ou diretor, e seu nome de contato, e-mail, telefone e país. O formulário de contato recebe os dados que você envia. Não informe números de seguridade social, passaporte, cartões nem documentos confidenciais no formulário de contato ou no assistente de IA."
   },
   "Orders, payments and AI": {
     "es": "Pedidos, pagos e IA",
     "pt": "Pedidos, pagamentos e IA"
   },
-  "Order information is used to prepare requested services and communicate about your order. When Stripe payments are connected, Stripe processes checkout information under its own privacy policy. Descriptions submitted to the AI advisor are sent to Lovable AI Gateway for a recommendation. Avoid sensitive information in those descriptions.": {
-    "es": "Los datos del pedido se usan para preparar los servicios solicitados y comunicarnos sobre su pedido. Cuando los pagos de Stripe están conectados, Stripe procesa los datos de pago bajo su política de privacidad. Las descripciones enviadas al asesor de IA se envían a Lovable AI Gateway para obtener una recomendación. Evite incluir información sensible.",
-    "pt": "Os dados do pedido são usados para preparar os serviços solicitados e comunicar sobre seu pedido. Quando os pagamentos Stripe estão conectados, a Stripe processa os dados de pagamento sob sua política de privacidade. Descrições enviadas ao assistente de IA são encaminhadas ao Lovable AI Gateway para uma recomendação. Evite informações sensíveis."
+  "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments under its own privacy policy; we never see or store your full card number. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.": {
+    "es": "Los datos del pedido se usan para preparar y presentar los servicios que solicita y para comunicarnos con usted sobre su pedido. Stripe procesa los pagos con tarjeta bajo su propia política de privacidad; nunca vemos ni guardamos el número completo de su tarjeta. Las descripciones que escribe en el asesor de planes con IA se envían a Anthropic, nuestro proveedor de IA, para generar una recomendación general, así que evite incluir información sensible.",
+    "pt": "Os dados do pedido são usados para preparar e protocolar os serviços solicitados e para nos comunicarmos com você sobre o pedido. A Stripe processa os pagamentos com cartão sob sua própria política de privacidade; nunca vemos nem guardamos o número completo do seu cartão. As descrições digitadas no assistente de planos com IA são enviadas à Anthropic, nossa fornecedora de IA, para gerar uma recomendação geral, então evite informações sensíveis."
   },
   "Public records and referrals": {
     "es": "Registros públicos y referencias",
     "pt": "Registros públicos e indicações"
   },
-  "Information included in Florida filings may become public through Sunbiz. Registered agent service does not make all company information private. Any sharing of client details with partner professionals, including the permission process, must be confirmed before this policy is finalized.": {
-    "es": "Los datos incluidos en registros de Florida pueden hacerse públicos en Sunbiz. El servicio de agente registrado no convierte todos los datos de la empresa en privados. Debe confirmarse cualquier envío de datos a profesionales aliados, incluido el proceso de autorización, antes de finalizar esta política.",
-    "pt": "Dados incluídos em registros da Flórida podem tornar-se públicos no Sunbiz. O serviço de agente registrado não torna privados todos os dados da empresa. O compartilhamento com profissionais parceiros, incluindo o processo de autorização, precisa ser confirmado antes de finalizar esta política."
+  "Information included in Florida filings, such as company names, addresses and the names of managers or officers, becomes public on Sunbiz. Registered agent service puts our address on the record for legal notices, but it does not make all company information private. We share your details with partner accountants or attorneys only when you ask us to refer you.": {
+    "es": "La información incluida en los registros de Florida, como el nombre de la empresa, las direcciones y los nombres de gerentes o directivos, se hace pública en Sunbiz. El servicio de agente registrado pone nuestra dirección en el registro para notificaciones legales, pero no hace privada toda la información de la empresa. Solo compartimos sus datos con contadores o abogados aliados cuando usted nos pide que le refiramos.",
+    "pt": "As informações incluídas nos registros da Flórida, como nome da empresa, endereços e nomes de administradores ou diretores, tornam-se públicas no Sunbiz. O serviço de agente registrado coloca nosso endereço no registro para notificações legais, mas não torna privadas todas as informações da empresa. Só compartilhamos seus dados com contadores ou advogados parceiros quando você pede uma indicação."
   },
-  "Preferences, advertising and retention": {
-    "es": "Preferencias, publicidad y conservación",
-    "pt": "Preferências, publicidade e retenção"
+  "Service providers, cookies and retention": {
+    "es": "Proveedores, cookies y conservación",
+    "pt": "Fornecedores, cookies e retenção"
   },
-  "The site saves your selected language in browser storage. Advertising trackers, analytics, retention periods and deletion procedures have not yet been confirmed by the business owner. This draft does not claim a specific retention period or that personal information is never shared or sold.": {
-    "es": "El sitio guarda el idioma seleccionado en el almacenamiento del navegador. El propietario aún no ha confirmado los rastreadores publicitarios, análisis, plazos de conservación ni procedimientos de eliminación. Este borrador no afirma un plazo específico ni que los datos nunca se compartan o vendan.",
-    "pt": "O site salva o idioma escolhido no armazenamento do navegador. Rastreadores de publicidade, análise, prazos de retenção e procedimentos de exclusão ainda não foram confirmados pelo proprietário. Este rascunho não afirma um prazo específico nem que os dados nunca sejam compartilhados ou vendidos."
+  "We use service providers to run the site: Cloudflare (hosting and email), Supabase (database), Stripe (payments), Anthropic (AI advisor) and Telegram (order notifications to our staff). The site saves your selected language in your browser and does not use advertising or analytics cookies. We do not sell your personal information. We keep order records as long as needed to provide your services and to meet legal, tax and accounting record-keeping requirements, and contact messages as long as needed to answer them.": {
+    "es": "Usamos proveedores para operar el sitio: Cloudflare (alojamiento y correo), Supabase (base de datos), Stripe (pagos), Anthropic (asesor de IA) y Telegram (avisos de pedidos a nuestro equipo). El sitio guarda el idioma que elige en su navegador y no usa cookies de publicidad ni de análisis. No vendemos su información personal. Conservamos los registros de pedidos el tiempo necesario para prestar sus servicios y cumplir los requisitos legales, fiscales y contables, y los mensajes de contacto el tiempo necesario para responderlos.",
+    "pt": "Usamos fornecedores para operar o site: Cloudflare (hospedagem e e-mail), Supabase (banco de dados), Stripe (pagamentos), Anthropic (assistente de IA) e Telegram (avisos de pedidos para nossa equipe). O site salva o idioma escolhido no seu navegador e não usa cookies de publicidade nem de análise. Não vendemos suas informações pessoais. Guardamos os registros de pedidos pelo tempo necessário para prestar seus serviços e cumprir exigências legais, fiscais e contábeis, e as mensagens de contato pelo tempo necessário para respondê-las."
   },
   "Privacy questions": {
     "es": "Preguntas de privacidad",
     "pt": "Dúvidas sobre privacidade"
   },
-  "Use our contact page for privacy questions without submitting sensitive information. A dedicated privacy email, business mailing address and final rights-request process must be added before treating this notice as a finalized policy.": {
-    "es": "Use la página de contacto para consultas de privacidad sin enviar información sensible. Deben añadirse un correo de privacidad, dirección postal y proceso definitivo para solicitudes de derechos antes de considerar finalizada esta política.",
-    "pt": "Use a página de contato para dúvidas de privacidade sem enviar informações sensíveis. É necessário adicionar e-mail de privacidade, endereço e processo definitivo para solicitações de direitos antes de considerar esta política finalizada."
+  "For privacy questions, or to ask for a copy, correction or deletion of your information, call us at (863) 450-1800 or use our contact page. Do not send sensitive information through the contact form. We may keep information we are required by law to retain.": {
+    "es": "Para preguntas de privacidad, o para pedir una copia, corrección o eliminación de su información, llámenos al (863) 450-1800 o use nuestra página de contacto. No envíe información sensible por el formulario de contacto. Podemos conservar la información que la ley nos obliga a guardar.",
+    "pt": "Para dúvidas de privacidade, ou para pedir uma cópia, correção ou exclusão das suas informações, ligue para (863) 450-1800 ou use nossa página de contato. Não envie informações sensíveis pelo formulário de contato. Podemos manter as informações que a lei nos obriga a guardar."
   },
   "Privacy contact": {
     "es": "Contacto de privacidad",
@@ -226,6 +226,10 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
   "Related pages": {
     "es": "Páginas relacionadas",
     "pt": "Páginas relacionadas"
+  },
+  "Updated October 27, 2026": {
+    "es": "Actualizado el 27 de octubre de 2026",
+    "pt": "Atualizado em 27 de outubro de 2026"
   },
   "Updated October 26, 2026": {
     "es": "Actualizado el 26 de octubre de 2026",

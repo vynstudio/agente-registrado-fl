@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useLang, LOCALES } from "@/i18n/LanguageContext";
+import { useLang, LOCALES, BRAND } from "@/i18n/LanguageContext";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -12,28 +12,9 @@ import { Button } from "@/components/ui/button";
 import BlockRenderer from "@/components/blog/BlockRenderer";
 import { ContentBlock } from "@/types/blog";
 import { useState, useEffect, useRef } from "react";
-// Author images
-import authorSarah from "@/assets/author-sarah.jpg";
-import authorMarcus from "@/assets/author-marcus.jpg";
-import authorEmily from "@/assets/author-emily.jpg";
-import authorDavid from "@/assets/author-david.jpg";
-
-// Blog post fallback images
-import blogAi1 from "@/assets/blog-ai-1.jpg";
-
-// Authors data
-const authors = [
-  { name: "Lee Minho", image: authorSarah },
-  { name: "Sarah Mitchell", image: authorSarah },
-  { name: "Marcus Chen", image: authorMarcus },
-  { name: "Emily Wong", image: authorEmily },
-  { name: "David Park", image: authorDavid },
-];
-
-const getAuthor = (postId: string) => {
-  const hash = postId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return authors[hash % authors.length];
-};
+// Posts are written by the business itself: its logo and name stand in as the author, and posts
+// without their own image show the Miami skyline.
+import { BLOG_AUTHOR_IMAGE, BLOG_FALLBACK_IMAGE } from "@/lib/blog";
 
 // Estimate read time based on content blocks or HTML
 const estimateReadTime = (blocks: ContentBlock[], htmlContent?: string): number => {
@@ -139,7 +120,7 @@ const BlogPost = () => {
     ? extractHeadingsFromBlocks(contentBlocks) 
     : extractHeadingsFromHtml(post?.content || '');
   const readTime = estimateReadTime(contentBlocks, post?.content);
-  const author = post ? getAuthor(post.id) : authors[0];
+  const author = { name: BRAND[lang], image: BLOG_AUTHOR_IMAGE };
 
   // Track reading progress - using requestAnimationFrame to prevent forced reflow
   useEffect(() => {
@@ -335,7 +316,7 @@ const BlogPost = () => {
           {/* Featured Image */}
           <div className="mb-12 rounded-2xl overflow-hidden">
             <img
-              src={post.featured_image_url || blogAi1}
+              src={post.featured_image_url || BLOG_FALLBACK_IMAGE}
               alt={post.title}
               className="w-full h-auto object-cover max-h-[480px]"
             />
@@ -373,7 +354,7 @@ const BlogPost = () => {
               <div className="flex-1">
                 {/* TOC heading */}
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">
-                  On this page
+                  {t("On this page")}
                 </p>
                 
                 {/* TOC links */}
