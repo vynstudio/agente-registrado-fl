@@ -31,6 +31,7 @@ const organization = {
   alternateName: ["Florida Registered Agent", "Agente Registrado da Flórida"],
   legalName: "Diler Services, LLC",
   url: `${ORIGIN}/`,
+  logo: `${ORIGIN}/icon-512.png`,
   image: `${ORIGIN}/og-image.jpg`,
   description: es(SEO_PAGES["/"].description),
   areaServed: { "@type": "State", name: "Florida" },

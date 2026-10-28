@@ -17,8 +17,8 @@ Everything to enter in business.google.com. Prices match `src/lib/catalog.ts`; u
 | Appointment link | https://agenteregistradofl.com/contact |
 | Languages / attributes | Spanish, English, Portuguese spoken · Online appointments · Onsite services |
 | Opening date | (the date the business started) |
-| Logo | public/apple-touch-icon.png (orange "AR") |
-| Cover photo | public/og-image.jpg (Miami skyline with name) |
+| Logo | Agente-Registrado-Logo-Kit/icons/social-avatar-1080.png |
+| Cover photo | public/og-image.jpg (Miami skyline with logo) |
 
 Rules to keep the profile safe: the name must be exactly the real business name (no extra keywords like "LLC Florida Barato"); the address must be a real office, not a P.O. box or virtual mailbox; the fictitious name "Agente Registrado Florida" should be registered on Sunbiz before or during verification.
 

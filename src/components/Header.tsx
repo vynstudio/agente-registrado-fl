@@ -1,5 +1,6 @@
 import { useLang } from "@/i18n/LanguageContext";
 import BrandName from "@/components/BrandName";
+import BrandMark from "@/components/BrandMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -38,8 +39,9 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 px-6 bg-background/80 backdrop-blur-md border border-border/50 rounded-[20px] shadow-sm">
         {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <span className="text-[17px] font-semibold text-foreground leading-tight"><BrandName /></span>
+        <Link to="/" className="flex items-center gap-2.5">
+          <BrandMark className="h-8 w-8 shrink-0" />
+          <span className="text-[17px] font-medium text-foreground leading-tight"><BrandName /></span>
         </Link>
 
         {/* Desktop Navigation */}

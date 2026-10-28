@@ -1,0 +1,9 @@
+// The "filing" isotype from the logo kit (Agente-Registrado-Logo-Kit/svg/isotype_color.svg).
+// Brand orange on light and dark backgrounds; never stretch, rotate or recolor it.
+const BrandMark = ({ className = "h-8 w-8" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} aria-hidden="true" focusable="false">
+    <path fillRule="evenodd" fill="#FF520A" d="M22 6 L66.5 6 L66.5 31.5 L92 31.5 L92 80 A14 14 0 0 1 78 94 L22 94 A14 14 0 0 1 8 80 L8 20 A14 14 0 0 1 22 6 Z M69.5 7.5 L69.5 26.5 A2 2 0 0 0 71.5 28.5 L90.5 28.5 Z M22.00 77.00 L33.20 45.00 L42.80 45.00 L54.00 77.00 L45.52 77.00 L43.14 70.20 L32.86 70.20 L30.48 77.00 Z M34.68 65.00 L38.00 55.40 L41.32 65.00 Z M57.20 45.00 L67.60 45.00 A10.40 10.40 0 0 1 74.86 62.85 L79.60 77.00 L71.12 77.00 L67.37 65.80 L65.20 65.80 L65.20 77.00 L57.20 77.00 Z M65.20 51.80 L67.60 51.80 A3.60 3.60 0 0 1 67.60 59.00 L65.20 59.00 Z" />
+  </svg>
+);
+
+export default BrandMark;
