@@ -44,6 +44,7 @@ const Start = () => {
   const [mailingSame, setMailingSame] = useState(true);
   const [ein, setEin] = useState({ responsible: "0", taxId: "", activity: "" });
   const [agreed, setAgreed] = useState(false);
+  const [cardAuthorized, setCardAuthorized] = useState(false);
   const [owners, setOwners] = useState<Owner[]>([{ name: "", ownership: "100", role: "", address: "" }]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [starting, setStarting] = useState(false);
@@ -108,6 +109,7 @@ const Start = () => {
     }
     if (form.signatureName.trim().length < 3) e.signatureName = req;
     if (!agreed) e.agreed = t("Please check the box to continue.");
+    if (!cardAuthorized) e.cardAuthorized = t("Please check the box to continue.");
     setErrors(e);
     if (Object.keys(e).length) setTimeout(() => document.querySelector('[aria-invalid="true"], [role="alert"]')?.scrollIntoView({ block: "center" }));
     return Object.keys(e).length === 0;
@@ -147,6 +149,7 @@ const Start = () => {
           } : undefined,
           signatureName: form.signatureName,
           agreedToTerms: agreed,
+          cardAuthorization: cardAuthorized,
         },
       });
       if (error || !data?.clientSecret) throw new Error();
@@ -383,6 +386,12 @@ const Start = () => {
                       </span>
                     </label>
                     {errors.agreed && <p className="text-xs text-destructive">{errors.agreed}</p>}
+                    {/* Same wording as supabase/functions/_shared/card-authorization.ts, which stores it on the order. */}
+                    <label className="flex items-start gap-3 text-sm text-foreground cursor-pointer">
+                      <Checkbox className="mt-0.5" checked={cardAuthorized} onCheckedChange={(c) => setCardAuthorized(!!c)} aria-invalid={!!errors.cardAuthorized} />
+                      <span>{t("I authorize Diler Services, LLC to save my card with Stripe and to charge it (1) {amount} for the Florida state filing fees of this order, when the filing is submitted, and (2) until I cancel, for the yearly renewal of registered agent service ($119) and annual report filing ($119 plus the Florida annual report fee), with notice before each renewal charge. I can cancel future charges at any time by contacting Diler Services, LLC.").replace("{amount}", `$${summary.stateTotal.toFixed(2)}`)}</span>
+                    </label>
+                    {errors.cardAuthorized && <p className="text-xs text-destructive">{errors.cardAuthorized}</p>}
                     {field("signatureName", "Type your full name as your signature")}
                   </div>
 
@@ -414,9 +423,15 @@ const Start = () => {
                 ))}
               </ul>
               <div className="mt-3 pt-3 border-t border-border flex justify-between font-semibold text-foreground">
-                <span>{t("Total")}</span><span data-testid="order-total">{money(summary.total)}</span>
+                <span>{t("Due today")}</span><span data-testid="order-total">{money(summary.total)}</span>
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">{t("One-time payment. Sales tax, if any, is shown at checkout.")}</p>
+              <p className="mt-5 text-sm font-medium text-foreground">{t("Charged to your saved card when we file")}</p>
+              <ul className="mt-2 space-y-2 text-sm">
+                {summary.stateLines.map((l) => (
+                  <li key={l.label} className="flex justify-between gap-3"><span className="text-muted-foreground">{t(l.label)}</span><span className="text-muted-foreground">{money(l.amount)}</span></li>
+                ))}
+              </ul>
+              <p className="mt-3 text-xs text-muted-foreground">{t("We pay the State of Florida on your behalf and charge your saved card the exact state fee, as you authorize at checkout. Sales tax, if any, is shown at checkout.")}</p>
             </aside>
           </div>
         </div>

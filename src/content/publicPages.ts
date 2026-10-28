@@ -34,7 +34,7 @@ export const publicPages = {
   },
   "privacy": {
     "title": "Privacy policy",
-    "updated": "Updated October 27, 2026",
+    "updated": "Updated October 28, 2026",
     "intro": "Diler Services, LLC operates Florida Registered Agent. This policy explains what information we collect on agenteregistradofl.com, how we use it and who we share it with.",
     "sections": [
       {
@@ -46,7 +46,7 @@ export const publicPages = {
       {
         "title": "Orders, payments and AI",
         "paragraphs": [
-          "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments under its own privacy policy; we never see or store your full card number. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.",
+          "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments and, with your authorization, keeps your card and billing address on file so we can charge state fees and renewals; we never see or store your full card number, only the card brand and last four digits. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.",
           "When you authorize a filing at checkout, we save your typed name, the date and time, your IP address and browser type as a record of your authorization. We never ask for Social Security numbers or ITINs on the website; if one is needed for an EIN application, we get it from you by phone and do not store it."
         ]
       },
@@ -187,7 +187,7 @@ export const publicPages = {
   "terms": {
     "title": "Terms of Service",
     "intro": "These terms apply to services ordered on agenteregistradofl.com from Diler Services, LLC, which operates Florida Registered Agent (\"we\", \"us\"). By placing an order you agree to these terms and to our Refund policy.",
-    "updated": "Updated October 26, 2026",
+    "updated": "Updated October 28, 2026",
     "sections": [
       {
         "title": "Our services",
@@ -204,7 +204,15 @@ export const publicPages = {
       {
         "title": "Prices and payment",
         "paragraphs": [
-          "Prices are shown before you pay and include our service fee plus the Florida state filing fee listed at checkout. Some services carry additional state fees, marked \"+ state fee\", which we charge when that service is used. Payments are processed by Stripe. Sales tax, if any, is shown at checkout."
+          "At checkout you pay our service fee. Florida state fees are shown before you pay, and we charge them to your saved card when we submit your filing (see \"Saved card and state fees\"). Services marked \"+ state fee\" carry additional state fees, charged the same way when the service is used. Payments are processed by Stripe. Sales tax, if any, is shown at checkout."
+        ]
+      },
+      {
+        "title": "Saved card and state fees",
+        "paragraphs": [
+          "When you order, you authorize us to keep your card on file with Stripe, together with your billing address. We charge it the exact Florida state filing fees for your order when we submit your filing, and we pay the State of Florida on your behalf.",
+          "Unless you cancel, we also charge the saved card each year for registered agent service renewal ($119) and annual report filing ($119 plus the Florida annual report fee), and we contact you before each renewal charge. You can cancel future charges, or ask us to use a different card, at any time by calling (863) 450-1800 or through our contact page.",
+          "If a charge to the saved card is declined, we will contact you before submitting the filing or renewal."
         ]
       },
       {
@@ -275,12 +283,12 @@ export const publicPages = {
   "refund-policy": {
     "title": "Refund policy",
     "intro": "How cancellations and refunds work for orders placed on agenteregistradofl.com.",
-    "updated": "Updated October 26, 2026",
+    "updated": "Updated October 28, 2026",
     "sections": [
       {
         "title": "Before we submit your filing",
         "paragraphs": [
-          "You can cancel for a full refund, including the state fee, at any time before we submit your filing to the State of Florida or the IRS. Contact us as soon as possible with your order details."
+          "You can cancel for a full refund of our service fee at any time before we submit your filing to the State of Florida or the IRS. State fees are charged to your saved card only when we submit, so nothing more is charged if you cancel first. Contact us as soon as possible with your order details."
         ]
       },
       {

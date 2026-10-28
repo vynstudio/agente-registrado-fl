@@ -59,9 +59,9 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Pedidos, pagos e IA",
     "pt": "Pedidos, pagamentos e IA"
   },
-  "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments under its own privacy policy; we never see or store your full card number. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.": {
-    "es": "Los datos del pedido se usan para preparar y presentar los servicios que solicita y para comunicarnos con usted sobre su pedido. Stripe procesa los pagos con tarjeta bajo su propia política de privacidad; nunca vemos ni guardamos el número completo de su tarjeta. Las descripciones que escribe en el asesor de planes con IA se envían a Anthropic, nuestro proveedor de IA, para generar una recomendación general, así que evite incluir información sensible.",
-    "pt": "Os dados do pedido são usados para preparar e protocolar os serviços solicitados e para nos comunicarmos com você sobre o pedido. A Stripe processa os pagamentos com cartão sob sua própria política de privacidade; nunca vemos nem guardamos o número completo do seu cartão. As descrições digitadas no assistente de planos com IA são enviadas à Anthropic, nossa fornecedora de IA, para gerar uma recomendação geral, então evite informações sensíveis."
+  "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments and, with your authorization, keeps your card and billing address on file so we can charge state fees and renewals; we never see or store your full card number, only the card brand and last four digits. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.": {
+    "es": "Los datos del pedido se usan para preparar y presentar los servicios que solicita y para comunicarnos con usted sobre su pedido. Stripe procesa los pagos con tarjeta y, con su autorización, guarda su tarjeta y dirección de facturación para que podamos cobrar tarifas estatales y renovaciones; nunca vemos ni guardamos el número completo de su tarjeta, solo la marca y los últimos cuatro dígitos. Las descripciones que escribe en el asesor de planes con IA se envían a Anthropic, nuestro proveedor de IA, para generar una recomendación general, así que evite incluir información sensible.",
+    "pt": "Os dados do pedido são usados para preparar e protocolar os serviços solicitados e para nos comunicarmos com você sobre o pedido. A Stripe processa os pagamentos com cartão e, com sua autorização, guarda seu cartão e endereço de cobrança para cobrarmos taxas estaduais e renovações; nunca vemos nem guardamos o número completo do seu cartão, apenas a bandeira e os quatro últimos dígitos. As descrições digitadas no assistente de planos com IA são enviadas à Anthropic, nossa fornecedora de IA, para gerar uma recomendação geral, então evite informações sensíveis."
   },
   "Public records and referrals": {
     "es": "Registros públicos y referencias",
@@ -227,6 +227,26 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Páginas relacionadas",
     "pt": "Páginas relacionadas"
   },
+  "Saved card and state fees": {
+    "es": "Tarjeta guardada y tarifas estatales",
+    "pt": "Cartão salvo e taxas estaduais"
+  },
+  "When you order, you authorize us to keep your card on file with Stripe, together with your billing address. We charge it the exact Florida state filing fees for your order when we submit your filing, and we pay the State of Florida on your behalf.": {
+    "es": "Al hacer su pedido, nos autoriza a guardar su tarjeta con Stripe, junto con su dirección de facturación. Le cobramos la tarifa estatal exacta de Florida de su pedido cuando presentamos su trámite y pagamos al Estado de Florida en su nombre.",
+    "pt": "Ao fazer o pedido, você nos autoriza a guardar seu cartão na Stripe, junto com o endereço de cobrança. Cobramos a taxa estadual exata da Flórida do seu pedido quando enviamos seu registro e pagamos o Estado da Flórida em seu nome."
+  },
+  "Unless you cancel, we also charge the saved card each year for registered agent service renewal ($119) and annual report filing ($119 plus the Florida annual report fee), and we contact you before each renewal charge. You can cancel future charges, or ask us to use a different card, at any time by calling (863) 450-1800 or through our contact page.": {
+    "es": "Salvo que cancele, también cobramos cada año a la tarjeta guardada la renovación del agente registrado ($119) y la presentación del informe anual ($119 más la tarifa estatal del informe anual), y le contactamos antes de cada cobro de renovación. Puede cancelar los cobros futuros, o pedirnos usar otra tarjeta, en cualquier momento llamando al (863) 450-1800 o desde nuestra página de contacto.",
+    "pt": "Salvo cancelamento, também cobramos todo ano no cartão salvo a renovação do agente registrado ($119) e o relatório anual ($119 mais a taxa estadual do relatório anual), e entramos em contato antes de cada cobrança de renovação. Você pode cancelar cobranças futuras, ou pedir que usemos outro cartão, a qualquer momento ligando para (863) 450-1800 ou pela nossa página de contato."
+  },
+  "If a charge to the saved card is declined, we will contact you before submitting the filing or renewal.": {
+    "es": "Si se rechaza un cobro a la tarjeta guardada, le contactaremos antes de presentar el trámite o la renovación.",
+    "pt": "Se uma cobrança no cartão salvo for recusada, entraremos em contato antes de enviar o registro ou a renovação."
+  },
+  "Updated October 28, 2026": {
+    "es": "Actualizado el 28 de octubre de 2026",
+    "pt": "Atualizado em 28 de outubro de 2026"
+  },
   "Updated October 27, 2026": {
     "es": "Actualizado el 27 de octubre de 2026",
     "pt": "Atualizado em 27 de outubro de 2026"
@@ -263,9 +283,9 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Precios y pago",
     "pt": "Preços e pagamento"
   },
-  "Prices are shown before you pay and include our service fee plus the Florida state filing fee listed at checkout. Some services carry additional state fees, marked \"+ state fee\", which we charge when that service is used. Payments are processed by Stripe. Sales tax, if any, is shown at checkout.": {
-    "es": "Los precios se muestran antes de pagar e incluyen nuestra tarifa de servicio más la tarifa estatal de Florida indicada al pagar. Algunos servicios tienen tarifas estatales adicionales, marcadas como \"+ tarifa estatal\", que cobramos cuando se usa ese servicio. Los pagos los procesa Stripe. El impuesto sobre las ventas, si corresponde, se muestra al pagar.",
-    "pt": "Os preços são mostrados antes do pagamento e incluem nossa taxa de serviço mais a taxa estadual da Flórida indicada no checkout. Alguns serviços têm taxas estaduais adicionais, marcadas como \"+ taxa estadual\", cobradas quando o serviço é usado. Os pagamentos são processados pela Stripe. O imposto sobre vendas, se houver, é mostrado no checkout."
+  "At checkout you pay our service fee. Florida state fees are shown before you pay, and we charge them to your saved card when we submit your filing (see \"Saved card and state fees\"). Services marked \"+ state fee\" carry additional state fees, charged the same way when the service is used. Payments are processed by Stripe. Sales tax, if any, is shown at checkout.": {
+    "es": "Al pagar, abona nuestro servicio. Las tarifas estatales de Florida se muestran antes de pagar y las cobramos a su tarjeta guardada cuando presentamos su trámite (vea \"Tarjeta guardada y tarifas estatales\"). Los servicios marcados \"+ tarifa estatal\" tienen tarifas estatales adicionales, que se cobran de la misma forma cuando se usa el servicio. Stripe procesa los pagos. El impuesto, si aplica, se muestra al pagar.",
+    "pt": "No pagamento, você paga nosso serviço. As taxas estaduais da Flórida aparecem antes do pagamento e são cobradas no seu cartão salvo quando enviamos seu registro (veja \"Cartão salvo e taxas estaduais\"). Serviços marcados \"+ taxa estadual\" têm taxas estaduais adicionais, cobradas da mesma forma quando o serviço é usado. A Stripe processa os pagamentos. Impostos, se houver, aparecem no pagamento."
   },
   "Timing and government decisions": {
     "es": "Plazos y decisiones del gobierno",
@@ -339,9 +359,9 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Antes de presentar su trámite",
     "pt": "Antes de enviarmos seu registro"
   },
-  "You can cancel for a full refund, including the state fee, at any time before we submit your filing to the State of Florida or the IRS. Contact us as soon as possible with your order details.": {
-    "es": "Puede cancelar y recibir un reembolso completo, incluida la tarifa estatal, en cualquier momento antes de que presentemos su trámite ante el Estado de Florida o el IRS. Contáctenos lo antes posible con los datos de su pedido.",
-    "pt": "Você pode cancelar e receber reembolso total, incluindo a taxa estadual, a qualquer momento antes de enviarmos seu registro ao Estado da Flórida ou ao IRS. Fale conosco o quanto antes com os dados do seu pedido."
+  "You can cancel for a full refund of our service fee at any time before we submit your filing to the State of Florida or the IRS. State fees are charged to your saved card only when we submit, so nothing more is charged if you cancel first. Contact us as soon as possible with your order details.": {
+    "es": "Puede cancelar con reembolso completo de nuestro servicio en cualquier momento antes de que presentemos su trámite ante el Estado de Florida o el IRS. Las tarifas estatales se cobran a su tarjeta guardada solo al presentar, así que no se cobra nada más si cancela antes. Contáctenos cuanto antes con los datos de su pedido.",
+    "pt": "Você pode cancelar com reembolso total do nosso serviço a qualquer momento antes de enviarmos seu registro ao Estado da Flórida ou ao IRS. As taxas estaduais são cobradas no seu cartão salvo apenas no envio, então nada mais é cobrado se cancelar antes. Fale conosco o quanto antes com os dados do pedido."
   },
   "After submission": {
     "es": "Después de presentarlo",

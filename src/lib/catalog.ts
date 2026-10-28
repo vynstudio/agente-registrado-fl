@@ -79,19 +79,20 @@ export const INCLUDED: Record<Plan, Extra[]> = {
   business_website: ["registered_agent", "ein", "expedited"],
 };
 
+// Today's checkout charge (our service fees) and the state fees charged later to the saved card.
+// Must match buildLineItems in supabase/functions/_shared/catalog.ts.
 export function orderTotal(plan: Plan, entity: Entity, extras: Extra[]) {
   const p = PLANS.find((x) => x.id === plan)!;
-  const lines: { label: string; amount: number }[] = [
-    { label: `${p.name} package`, amount: p.price },
-    { label: "Florida state filing fee", amount: STATE_FEE[entity] },
-  ];
+  const lines: { label: string; amount: number }[] = [{ label: `${p.name} package`, amount: p.price }];
+  const stateLines: { label: string; amount: number }[] = [{ label: "Florida state filing fee", amount: STATE_FEE[entity] }];
   for (const e of extras) {
     if (INCLUDED[plan].includes(e)) continue;
     const x = EXTRAS.find((y) => y.id === e)!;
     lines.push({ label: x.name, amount: x.price });
-    if (e === "annual_report") lines.push({ label: "Florida annual report state fee", amount: ANNUAL_REPORT_FEE[entity] });
+    if (e === "annual_report") stateLines.push({ label: "Florida annual report state fee", amount: ANNUAL_REPORT_FEE[entity] });
   }
-  return { lines, total: Math.round(lines.reduce((s, l) => s + l.amount, 0) * 100) / 100 };
+  const sum = (l: { amount: number }[]) => Math.round(l.reduce((s, x) => s + x.amount, 0) * 100) / 100;
+  return { lines, total: sum(lines), stateLines, stateTotal: sum(stateLines) };
 }
 
 export const money = (n: number) => `$${n % 1 ? n.toFixed(2) : n}`;

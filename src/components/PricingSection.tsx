@@ -39,7 +39,7 @@ const PricingSection = () => {
             transition={{ delay: 0.1 }}
             className="text-muted-foreground lg:max-w-xs lg:text-right lg:pt-12"
           >
-            {t("One-time formation fee. Florida state filing fee ($125 for an LLC, $70 for a corporation) is added at checkout.")}
+            {t("One-time formation fee. The Florida state filing fee ($125 for an LLC, $70 for a corporation) is charged to your saved card when we file.")}
           </motion.p>
         </div>
 

@@ -3,6 +3,7 @@ import { z } from "npm:zod@3";
 import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
 import { buildLineItems } from "../_shared/catalog.ts";
 import { money, sendAlert } from "../_shared/alerts.ts";
+import { cardAuthorizationText } from "../_shared/card-authorization.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -49,6 +50,8 @@ const schema = z.object({
   }).optional(),
   signatureName: text(120),
   agreedToTerms: z.literal(true),
+  // Saved card for state fees and renewals (_shared/card-authorization.ts).
+  cardAuthorization: z.literal(true),
 });
 
 const json = (body: unknown, status = 200) =>
@@ -62,7 +65,7 @@ Deno.serve(async (req) => {
     if (!parsed.success) return json({ error: "Please check the form and try again." }, 400);
     const d = parsed.data;
     const env = d.environment as StripeEnv;
-    const { items, extras, totalCents } = buildLineItems(d.plan, d.entityType, d.extras);
+    const { items, extras, totalCents, stateFeeCents } = buildLineItems(d.plan, d.entityType, d.extras);
 
     const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const { data: order, error } = await db.from("orders").insert({
@@ -71,7 +74,8 @@ Deno.serve(async (req) => {
       business_purpose: d.businessPurpose || null, owners: d.owners,
       contact_name: d.contactName, contact_email: d.contactEmail, contact_phone: d.contactPhone,
       country: d.country, address: d.address, language: d.language,
-      total_cents: totalCents, environment: env,
+      total_cents: totalCents, state_fee_cents: stateFeeCents, environment: env,
+      card_authorization: cardAuthorizationText(d.language, stateFeeCents),
       filing: d.filing,
       ein: d.ein ?? null,
       // Authorization record (typed signature, time, IP, browser), kept as evidence of the client's consent.
@@ -98,9 +102,9 @@ Deno.serve(async (req) => {
     const planName = { starter: "Starter", professional: "Professional", international: "International+", business_website: "Business + Website" }[d.plan];
     // Shown above the pay button; also the customer's agreement record if a charge is disputed.
     const termsNotice = {
-      en: "By paying, you agree to our [Terms of Service](https://agenteregistradofl.com/terms) and [Refund policy](https://agenteregistradofl.com/refund-policy). Full refund until we submit your filing; state fees paid on your behalf are non-refundable.",
-      es: "Al pagar, acepta nuestros [Términos del servicio](https://agenteregistradofl.com/terms) y nuestra [Política de reembolsos](https://agenteregistradofl.com/refund-policy). Reembolso completo hasta que presentemos su trámite; las tarifas estatales pagadas en su nombre no son reembolsables.",
-      pt: "Ao pagar, você aceita nossos [Termos de serviço](https://agenteregistradofl.com/terms) e nossa [Política de reembolso](https://agenteregistradofl.com/refund-policy). Reembolso total até enviarmos seu registro; as taxas estaduais pagas em seu nome não são reembolsáveis.",
+      en: `Today you pay our service fee only. Your card is saved with Stripe, and we charge the Florida state fees (${money(stateFeeCents)}) when we submit your filing, as you authorized. By paying, you agree to our [Terms of Service](https://agenteregistradofl.com/terms) and [Refund policy](https://agenteregistradofl.com/refund-policy).`,
+      es: `Hoy paga solo nuestro servicio. Su tarjeta queda guardada con Stripe y cobramos las tarifas estatales de Florida (${money(stateFeeCents)}) al presentar su trámite, según lo autorizó. Al pagar, acepta nuestros [Términos del servicio](https://agenteregistradofl.com/terms) y nuestra [Política de reembolsos](https://agenteregistradofl.com/refund-policy).`,
+      pt: `Hoje você paga apenas nosso serviço. Seu cartão fica salvo na Stripe e cobramos as taxas estaduais da Flórida (${money(stateFeeCents)}) ao enviar seu registro, conforme autorizado. Ao pagar, você aceita nossos [Termos de serviço](https://agenteregistradofl.com/terms) e nossa [Política de reembolso](https://agenteregistradofl.com/refund-policy).`,
     }[d.language];
     const params = {
       line_items,
@@ -110,8 +114,16 @@ Deno.serve(async (req) => {
       customer,
       locale: d.language,
       automatic_tax: { enabled: true },
-      customer_update: { address: "auto" },
-      payment_intent_data: { description: `${planName} — Florida ${d.entityType === "llc" ? "LLC" : "corporation"}: ${d.companyName}` },
+      customer_update: { address: "auto", name: "auto" },
+      billing_address_collection: "required",
+      // Cards only: the saved payment method must be chargeable later for state fees and renewals.
+      payment_method_types: ["card"],
+      payment_intent_data: {
+        description: `${planName} — Florida ${d.entityType === "llc" ? "LLC" : "corporation"}: ${d.companyName}`,
+        // Keeps the card in Stripe for the state fee and renewals the client authorized.
+        setup_future_usage: "off_session",
+        metadata: { orderId: order.id },
+      },
       metadata: { orderId: order.id },
       custom_text: { submit: { message: termsNotice } },
     };
@@ -123,7 +135,7 @@ Deno.serve(async (req) => {
     } catch (e) {
       if (!String((e as Error).message).includes("head office address")) throw e;
       console.warn("Tax not configured yet; creating checkout without automatic tax");
-      const { automatic_tax: _t, customer_update: _c, ...rest } = params;
+      const { automatic_tax: _t, ...rest } = params;
       session = await stripe.checkout.sessions.create(rest as any);
     }
 
@@ -133,6 +145,7 @@ Deno.serve(async (req) => {
       ["Company", d.companyName],
       ["Package", `${planName} · ${d.entityType === "llc" ? "LLC" : "Corporation"}`],
       ["Total", money(totalCents)],
+      ["State fee (to saved card)", money(stateFeeCents)],
       ["Name", d.contactName],
       ["Phone", d.contactPhone],
       ["Email", d.contactEmail],

@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PLANS, EXTRAS } from "@/lib/catalog";
+import { PLANS, EXTRAS, ANNUAL_REPORT_FEE } from "@/lib/catalog";
+import { Button } from "@/components/ui/button";
 
 interface Order {
   id: string;
@@ -31,10 +33,35 @@ interface Order {
   address: string;
   language: string;
   total_cents: number;
+  state_fee_cents: number | null;
+  card_authorization: string | null;
+  stripe_payment_method_id: string | null;
+  card_label: string | null;
   status: string;
   environment: string;
   created_at: string;
 }
+
+interface Charge {
+  id: string;
+  order_id: string;
+  kind: ChargeKind;
+  period: string;
+  amount_cents: number;
+  status: "pending" | "succeeded" | "failed";
+  error: string | null;
+  created_at: string;
+}
+
+// Charges to the client's saved card; amounts are set by the charge-saved-card function and shown here
+// from src/lib/catalog.ts for the confirmation prompt.
+type ChargeKind = "state_fee" | "annual_report_renewal" | "registered_agent_renewal";
+const CHARGE_KINDS: { kind: ChargeKind; label: string; amount: (o: Order) => number }[] = [
+  { kind: "state_fee", label: "Charge state fee", amount: (o) => (o.state_fee_cents ?? 0) / 100 },
+  { kind: "annual_report_renewal", label: "Charge annual report renewal", amount: (o) => 119 + ANNUAL_REPORT_FEE[o.entity_type as "llc" | "corp"] },
+  { kind: "registered_agent_renewal", label: "Charge registered agent renewal", amount: () => 119 },
+];
+const usd = (n: number) => `$${n.toFixed(2)}`;
 
 const STATUSES = ["pending", "paid", "filed", "completed", "processing", "failed", "abandoned"];
 
@@ -53,6 +80,28 @@ const AdminOrders = () => {
       return (data ?? []) as unknown as Order[];
     },
   });
+
+  const { data: charges } = useQuery({
+    queryKey: ["admin-order-charges"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("order_charges" as never).select("*").order("created_at");
+      if (error) throw error;
+      return (data ?? []) as unknown as Charge[];
+    },
+  });
+  const [charging, setCharging] = useState<string | null>(null);
+  const [chargeResult, setChargeResult] = useState<Record<string, string>>({});
+
+  const chargeCard = async (o: Order, c: (typeof CHARGE_KINDS)[number]) => {
+    if (!window.confirm(`${c.label.replace("Charge ", "Charge the ")} of ${usd(c.amount(o))} to ${o.card_label ?? "the saved card"} for ${o.company_name}?`)) return;
+    setCharging(`${o.id}:${c.kind}`);
+    const { data, error } = await supabase.functions.invoke("charge-saved-card", { body: { orderId: o.id, kind: c.kind } });
+    let message = data?.ok ? `Charged ${usd(data.amount_cents / 100)}` : data?.error;
+    if (error && "context" in error) message = (await (error.context as Response).json().catch(() => null))?.error;
+    setChargeResult((r) => ({ ...r, [o.id]: message ?? "Charge failed" }));
+    setCharging(null);
+    qc.invalidateQueries({ queryKey: ["admin-order-charges"] });
+  };
 
   const updateStatus = async (id: string, status: string) => {
     await supabase.from("orders").update({ status }).eq("id", id);
@@ -125,6 +174,35 @@ const AdminOrders = () => {
                     Responsible: {o.ein.responsibleParty} · {o.ein.taxId === "none" ? "no SSN/ITIN (foreign applicant)" : `has ${o.ein.taxId.toUpperCase()} — call client to get it`} ·
                     started {o.ein.startDate} · {o.ein.activity} · {o.ein.employees} employees expected
                   </p>
+                </div>
+              )}
+              {o.card_authorization && (
+                <div className="mt-3 rounded-lg border border-border p-3 text-sm text-foreground">
+                  <p>
+                    <span className="text-muted-foreground">Saved card:</span> {o.card_label ?? (o.status === "pending" ? "saved once the client pays" : "not saved")}
+                    {o.state_fee_cents != null && <span className="text-muted-foreground"> · state fee due when filing {usd(o.state_fee_cents / 100)}</span>}
+                  </p>
+                  {charges?.filter((c) => c.order_id === o.id).map((c) => (
+                    <p key={c.id} className="text-[13px] text-muted-foreground">
+                      {c.kind.replace(/_/g, " ")} {c.period !== "formation" && c.period} · {usd(c.amount_cents / 100)} · <span className={c.status === "failed" ? "text-destructive" : "text-foreground"}>{c.status}</span>
+                      {c.error && ` (${c.error})`} · {new Date(c.created_at).toLocaleDateString()}
+                    </p>
+                  ))}
+                  {o.stripe_payment_method_id && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {CHARGE_KINDS.map((c) => (
+                        <Button key={c.kind} size="sm" variant={c.kind === "state_fee" ? "default" : "outline"} className="rounded-full"
+                          disabled={charging !== null} onClick={() => chargeCard(o, c)}>
+                          {charging === `${o.id}:${c.kind}` ? "Charging…" : `${c.label} ${usd(c.amount(o))}`}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                  {chargeResult[o.id] && <p className="mt-2 text-[13px]">{chargeResult[o.id]}</p>}
+                  <details className="mt-2 text-[12px] text-muted-foreground">
+                    <summary className="cursor-pointer">Authorization the client accepted</summary>
+                    <p className="mt-1">{o.card_authorization}</p>
+                  </details>
                 </div>
               )}
               {o.signature_name && (

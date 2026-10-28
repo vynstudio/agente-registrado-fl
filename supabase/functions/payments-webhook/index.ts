@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
-import { type StripeEnv, verifyWebhook } from "../_shared/stripe.ts";
+import { type StripeEnv, createStripeClient, verifyWebhook } from "../_shared/stripe.ts";
 import { ADMIN_ORDERS_URL, money, sendAlert } from "../_shared/alerts.ts";
 import { sendOrderConfirmation } from "../_shared/client-email.ts";
 
@@ -8,11 +8,25 @@ const db = () => (_db ??= createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.g
 
 const PLAN_NAMES: Record<string, string> = { starter: "Starter", professional: "Professional", international: "International+", business_website: "Business + Website" };
 
+// The card Stripe saved at checkout, for the state fee and renewals the client authorized.
+async function savedCard(session: any, env: StripeEnv) {
+  if (typeof session.payment_intent !== "string") return {};
+  const pi = await createStripeClient(env).paymentIntents.retrieve(session.payment_intent, { expand: ["payment_method"] });
+  const pm = pi.payment_method;
+  if (!pm || typeof pm === "string") return {};
+  return {
+    stripe_customer_id: typeof session.customer === "string" ? session.customer : pi.customer,
+    stripe_payment_method_id: pm.id,
+    card_label: pm.card ? `${pm.card.brand} •••• ${pm.card.last4}` : pm.type,
+  };
+}
+
 async function setStatus(session: any, env: StripeEnv, status: string) {
   const orderId = session.metadata?.orderId;
   if (!orderId) return;
+  const card = status === "paid" ? await savedCard(session, env).catch((e) => (console.error("Saved card lookup failed", e), {})) : {};
   const { data: order } = await db().from("orders")
-    .update({ status, ...(status === "paid" && { paid_at: new Date().toISOString() }) })
+    .update({ status, ...card, ...(status === "paid" && { paid_at: new Date().toISOString() }) })
     .eq("id", orderId).eq("environment", env).neq("status", status)
     .select("*").maybeSingle();
   // Only on the change to "paid" (Stripe may resend an event), so each new client alerts once
@@ -23,6 +37,7 @@ async function setStatus(session: any, env: StripeEnv, status: string) {
       ["Package", `${PLAN_NAMES[order.plan] ?? order.plan} · ${order.entity_type === "llc" ? "LLC" : "Corporation"}`],
       ["Add-ons", order.extras?.join(", ")],
       ["Paid", money(order.total_cents)],
+      ["State fee to charge", order.state_fee_cents ? `${money(order.state_fee_cents)} to ${order.card_label ?? "saved card"} when filing` : undefined],
       ["Client", order.contact_name],
       ["Phone", order.contact_phone],
       ["Email", order.contact_email],

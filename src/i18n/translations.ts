@@ -163,9 +163,9 @@ export const translations: Record<string, T> = {
 
   // Pricing
   "Simple pricing, plus state fees": { es: "Precios simples, más tarifas estatales", pt: "Preços simples, mais taxas estaduais" },
-  "One-time formation fee. Florida state filing fee ($125 for an LLC, $70 for a corporation) is added at checkout.": {
-    es: "Pago único de formación. La tarifa estatal de Florida ($125 para una LLC, $70 para una corporación) se suma al pagar.",
-    pt: "Taxa única de abertura. A taxa estadual da Flórida (US$125 para LLC, US$70 para corporação) é somada no pagamento.",
+  "One-time formation fee. The Florida state filing fee ($125 for an LLC, $70 for a corporation) is charged to your saved card when we file.": {
+    es: "Pago único de formación. La tarifa estatal de Florida ($125 para una LLC, $70 para una corporación) se cobra a su tarjeta guardada al presentar el trámite.",
+    pt: "Taxa única de abertura. A taxa estadual da Flórida (US$125 para LLC, US$70 para corporação) é cobrada no seu cartão salvo quando enviamos o registro.",
   },
   "Basic": { es: "Básico", pt: "Básico" },
   "Standard": { es: "Estándar", pt: "Padrão" },
@@ -304,6 +304,13 @@ export const translations: Record<string, T> = {
   "Could not start checkout. Please try again.": { es: "No se pudo iniciar el pago. Inténtelo de nuevo.", pt: "Não foi possível iniciar o pagamento. Tente novamente." },
   "Order summary": { es: "Resumen del pedido", pt: "Resumo do pedido" },
   "Total": { es: "Total", pt: "Total" },
+  "Due today": { es: "A pagar hoy", pt: "A pagar hoje" },
+  "Charged to your saved card when we file": { es: "Se cobra a su tarjeta guardada al presentar el trámite", pt: "Cobrado no seu cartão salvo ao enviar o registro" },
+  "We pay the State of Florida on your behalf and charge your saved card the exact state fee, as you authorize at checkout. Sales tax, if any, is shown at checkout.": { es: "Pagamos al Estado de Florida en su nombre y cobramos a su tarjeta guardada la tarifa estatal exacta, según lo autoriza al pagar. El impuesto, si aplica, se muestra al pagar.", pt: "Pagamos o Estado da Flórida em seu nome e cobramos no seu cartão salvo a taxa estadual exata, conforme você autoriza no pagamento. Impostos, se houver, aparecem no pagamento." },
+  "I authorize Diler Services, LLC to save my card with Stripe and to charge it (1) {amount} for the Florida state filing fees of this order, when the filing is submitted, and (2) until I cancel, for the yearly renewal of registered agent service ($119) and annual report filing ($119 plus the Florida annual report fee), with notice before each renewal charge. I can cancel future charges at any time by contacting Diler Services, LLC.": {
+    es: "Autorizo a Diler Services, LLC a guardar mi tarjeta con Stripe y a cobrarle (1) {amount} por las tarifas estatales de Florida de este pedido, cuando se presente el trámite, y (2) hasta que yo cancele, la renovación anual del servicio de agente registrado ($119) y la presentación del informe anual ($119 más la tarifa estatal del informe anual), con aviso antes de cada cobro de renovación. Puedo cancelar los cobros futuros en cualquier momento contactando a Diler Services, LLC.",
+    pt: "Autorizo a Diler Services, LLC a salvar meu cartão na Stripe e a cobrar (1) {amount} pelas taxas estaduais da Flórida deste pedido, quando o registro for enviado, e (2) até que eu cancele, a renovação anual do serviço de agente registrado ($119) e do relatório anual ($119 mais a taxa estadual do relatório anual), com aviso antes de cada cobrança de renovação. Posso cancelar cobranças futuras a qualquer momento entrando em contato com a Diler Services, LLC.",
+  },
   "One-time payment. Sales tax, if any, is shown at checkout.": { es: "Pago único. El impuesto, si aplica, se muestra al pagar.", pt: "Pagamento único. Impostos, se houver, aparecem no pagamento." },
   "Thank you! Your order is in.": { es: "¡Gracias! Recibimos su pedido.", pt: "Obrigado! Recebemos seu pedido." },
   "We'll review your details and file with the State of Florida, usually within 1 business day. You'll get a receipt by email, and we'll contact you if anything is missing.": {
