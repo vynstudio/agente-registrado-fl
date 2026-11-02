@@ -2,9 +2,10 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useState 
 import { translations } from "./translations";
 
 export type Lang = "en" | "es" | "pt";
+// Order of the language buttons: Spanish first, English second, Portuguese third.
 export const LANGS: { code: Lang; label: string }[] = [
-  { code: "en", label: "EN" },
   { code: "es", label: "ES" },
+  { code: "en", label: "EN" },
   { code: "pt", label: "PT" },
 ];
 
