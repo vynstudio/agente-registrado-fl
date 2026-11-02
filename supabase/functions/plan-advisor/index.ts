@@ -40,7 +40,7 @@ const recommendationJsonSchema = {
 
 const LANG = { en: "English", es: "Spanish", pt: "Brazilian Portuguese" } as const;
 
-const instructions = (lang: keyof typeof LANG) => `You help visitors of "Agente Registrado Florida", a Florida business formation service, pick a company type and package.
+const instructions = (lang: keyof typeof LANG) => `You help visitors of "Diler Corporate", a Florida business formation service, pick a company type and package.
 You are NOT a lawyer or accountant and must not give legal or tax advice. Give general, educational guidance only.
 
 Company types:

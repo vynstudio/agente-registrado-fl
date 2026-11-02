@@ -2,7 +2,7 @@ export type PublicPageKey = "legal-disclaimer" | "privacy" | "florida-llc-vs-cor
 export const publicPages = {
   "legal-disclaimer": {
     "title": "Legal disclaimer",
-    "intro": "Florida Registered Agent is operated by Diler Services, LLC. Our services provide administrative filing assistance and general information.",
+    "intro": "Diler Corporate is operated by Diler Services, LLC. Our services provide administrative filing assistance and general information.",
     "sections": [
       {
         "title": "Not legal or tax advice",
@@ -34,7 +34,7 @@ export const publicPages = {
   },
   "privacy": {
     "title": "Privacy policy",
-    "intro": "Diler Services, LLC operates Florida Registered Agent. This draft notice describes the information requested by the website; final privacy practices and contact details are pending confirmation.",
+    "intro": "Diler Services, LLC operates Diler Corporate. This draft notice describes the information requested by the website; final privacy practices and contact details are pending confirmation.",
     "sections": [
       {
         "title": "Information you provide",
@@ -185,7 +185,7 @@ export const publicPages = {
   },
   "terms": {
     "title": "Terms of Service",
-    "intro": "These terms apply to services ordered on agenteregistradofl.com from Diler Services, LLC, which operates Florida Registered Agent (\"we\", \"us\"). By placing an order you agree to these terms and to our Refund policy.",
+    "intro": "These terms apply to services ordered on agenteregistradofl.com from Diler Services, LLC, which operates Diler Corporate (\"we\", \"us\"). By placing an order you agree to these terms and to our Refund policy.",
     "updated": "Updated October 26, 2026",
     "sections": [
       {

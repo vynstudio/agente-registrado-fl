@@ -151,7 +151,7 @@ const AdminLogin = () => {
           </div>
           {/* Logo */}
           <Link to="/" className="flex items-center mb-12 lg:mb-20">
-            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap">Agente Registrado <span className="text-lime">Florida</span></span>
+            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap">Diler <span className="text-lime">Corporate</span></span>
           </Link>
 
           {/* Form container */}

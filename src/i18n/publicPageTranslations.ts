@@ -3,9 +3,9 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Aviso legal",
     "pt": "Aviso legal"
   },
-  "Florida Registered Agent is operated by Diler Services, LLC. Our services provide administrative filing assistance and general information.": {
-    "es": "Agente Registrado Florida es operado por Diler Services, LLC. Nuestros servicios ofrecen asistencia administrativa para trámites e información general.",
-    "pt": "Agente Registrado da Flórida é operado por Diler Services, LLC. Nossos serviços oferecem assistência administrativa para registros e informações gerais."
+  "Diler Corporate is operated by Diler Services, LLC. Our services provide administrative filing assistance and general information.": {
+    "es": "Diler Corporate es operado por Diler Services, LLC. Nuestros servicios ofrecen asistencia administrativa para trámites e información general.",
+    "pt": "A Diler Corporate é operada pela Diler Services, LLC. Nossos serviços oferecem assistência administrativa para registros e informações gerais."
   },
   "Not legal or tax advice": {
     "es": "No es asesoría legal ni fiscal",
@@ -43,9 +43,9 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Política de privacidad",
     "pt": "Política de privacidade"
   },
-  "Diler Services, LLC operates Florida Registered Agent. This draft notice describes the information requested by the website; final privacy practices and contact details are pending confirmation.": {
-    "es": "Diler Services, LLC opera Agente Registrado Florida. Este aviso provisional describe los datos solicitados en el sitio; las prácticas definitivas y los datos de contacto están pendientes de confirmación.",
-    "pt": "Diler Services, LLC opera Agente Registrado da Flórida. Este aviso provisório descreve os dados solicitados pelo site; as práticas definitivas e os dados de contato aguardam confirmação."
+  "Diler Services, LLC operates Diler Corporate. This draft notice describes the information requested by the website; final privacy practices and contact details are pending confirmation.": {
+    "es": "Diler Services, LLC opera Diler Corporate. Este aviso provisional describe los datos solicitados en el sitio; las prácticas definitivas y los datos de contacto están pendientes de confirmación.",
+    "pt": "A Diler Services, LLC opera a Diler Corporate. Este aviso provisório descreve os dados solicitados pelo site; as práticas definitivas e os dados de contato aguardam confirmação."
   },
   "Information you provide": {
     "es": "Información que proporciona",
@@ -235,9 +235,9 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Términos del servicio",
     "pt": "Termos de serviço"
   },
-  "These terms apply to services ordered on agenteregistradofl.com from Diler Services, LLC, which operates Florida Registered Agent (\"we\", \"us\"). By placing an order you agree to these terms and to our Refund policy.": {
-    "es": "Estos términos se aplican a los servicios contratados en agenteregistradofl.com con Diler Services, LLC, que opera Agente Registrado Florida (\"nosotros\"). Al realizar un pedido, usted acepta estos términos y nuestra Política de reembolsos.",
-    "pt": "Estes termos se aplicam aos serviços contratados em agenteregistradofl.com com a Diler Services, LLC, que opera a Agente Registrado da Flórida (\"nós\"). Ao fazer um pedido, você aceita estes termos e nossa Política de reembolso."
+  "These terms apply to services ordered on agenteregistradofl.com from Diler Services, LLC, which operates Diler Corporate (\"we\", \"us\"). By placing an order you agree to these terms and to our Refund policy.": {
+    "es": "Estos términos se aplican a los servicios contratados en agenteregistradofl.com con Diler Services, LLC, que opera Diler Corporate (\"nosotros\"). Al realizar un pedido, usted acepta estos términos y nuestra Política de reembolsos.",
+    "pt": "Estes termos se aplicam aos serviços contratados em agenteregistradofl.com com a Diler Services, LLC, que opera a Diler Corporate (\"nós\"). Ao fazer um pedido, você aceita estes termos e nossa Política de reembolso."
   },
   "Our services": {
     "es": "Nuestros servicios",

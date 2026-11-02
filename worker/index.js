@@ -16,7 +16,7 @@ import { alertEmail } from "./alert-email";
 
 const ORIGIN = "https://agenteregistradofl.com";
 const PUBLIC_HOSTS = new Set(["agenteregistradofl.com", "www.agenteregistradofl.com"]);
-const BRAND = "Agente Registrado Florida";
+const BRAND = "Diler Corporate";
 const es = (text) => translations[text]?.es ?? text;
 
 // Pages that render in the browser but should not appear in search results.
@@ -28,7 +28,8 @@ const organization = {
   "@type": "Organization",
   "@id": `${ORIGIN}/#organization`,
   name: BRAND,
-  alternateName: ["Florida Registered Agent", "Agente Registrado da Flórida"],
+  // Earlier names, so search engines connect them to the new brand.
+  alternateName: ["Agente Registrado Florida", "Florida Registered Agent", "Agente Registrado da Flórida"],
   legalName: "Diler Services, LLC",
   url: `${ORIGIN}/`,
   image: `${ORIGIN}/og-image.jpg`,

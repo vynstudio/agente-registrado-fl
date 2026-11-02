@@ -74,7 +74,7 @@ const Footer = () => {
         {/* Bottom Row */}
         <div className="border-t border-border pt-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-8">
           <p className="text-[13px] sm:text-[14px] text-foreground shrink-0">
-            {t("© 2026 Florida Registered Agent. All rights reserved.")}
+            {t("© 2026 Diler Corporate. All rights reserved.")}
           </p>
           <p className="text-[13px] text-muted-foreground md:text-right md:max-w-xl">
             {t("Operated by Diler Services, LLC. We are not a law firm and do not give legal or tax advice.")}

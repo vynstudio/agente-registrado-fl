@@ -7,7 +7,7 @@ const page = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>En mantenimiento | Agente Registrado Florida</title>
+<title>En mantenimiento | Diler Corporate</title>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
@@ -25,7 +25,7 @@ const page = `<!doctype html>
 </head>
 <body>
 <main>
-  <div class="brand">Agente Registrado <span>Florida</span></div>
+  <div class="brand">Diler <span>Corporate</span></div>
   <h1>Estamos en mantenimiento</h1>
   <p>Volvemos pronto.</p>
   <div class="other">

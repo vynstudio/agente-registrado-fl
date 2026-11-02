@@ -38,7 +38,7 @@ export const translations: Record<string, T> = {
   "Test mode: no real payments are charged. Use card 4242 4242 4242 4242.": { es: "Modo de prueba: no se cobran pagos reales. Use la tarjeta 4242 4242 4242 4242.", pt: "Modo de teste: nenhum pagamento real é cobrado. Use o cartão 4242 4242 4242 4242." },
   // About page
   "Florida business formation for US and international founders": { es: "Formación de empresas en Florida para fundadores de EE. UU. e internacionales", pt: "Abertura de empresas na Flórida para fundadores dos EUA e internacionais" },
-  "Florida Registered Agent helps entrepreneurs form a Florida LLC or corporation, get an EIN, and keep a registered agent in Florida. We handle the paperwork so you can focus on your business.": { es: "Agente Registrado Florida ayuda a emprendedores a formar una LLC o corporación en Florida, obtener un EIN y mantener un agente registrado en Florida. Nos encargamos del papeleo para que usted se enfoque en su negocio.", pt: "O Agente Registrado da Flórida ajuda empreendedores a abrir uma LLC ou corporação na Flórida, obter um EIN e manter um agente registrado na Flórida. Cuidamos da papelada para você focar no seu negócio." },
+  "Diler Corporate helps entrepreneurs form a Florida LLC or corporation, get an EIN, and keep a registered agent in Florida. We handle the paperwork so you can focus on your business.": { es: "Diler Corporate ayuda a emprendedores a formar una LLC o corporación en Florida, obtener un EIN y mantener un agente registrado en Florida. Nos encargamos del papeleo para que usted se enfoque en su negocio.", pt: "A Diler Corporate ajuda empreendedores a abrir uma LLC ou corporação na Flórida, obter um EIN e manter um agente registrado na Flórida. Cuidamos da papelada para você focar no seu negócio." },
   "Florida filings, done right": { es: "Trámites en Florida, bien hechos", pt: "Registros na Flórida, bem feitos" },
   "We prepare and submit your Florida LLC or corporation filing with the State of Florida (Sunbiz) and keep you updated.": { es: "Preparamos y presentamos la solicitud de su LLC o corporación ante el Estado de Florida (Sunbiz) y lo mantenemos informado.", pt: "Preparamos e enviamos o registro da sua LLC ou corporação ao Estado da Flórida (Sunbiz) e mantemos você informado." },
   "Built for US and international founders": { es: "Para fundadores de EE. UU. e internacionales", pt: "Para fundadores dos EUA e internacionais" },
@@ -57,7 +57,7 @@ export const translations: Record<string, T> = {
   "START NOW": { es: "EMPEZAR", pt: "COMEÇAR" },
   "START MY BUSINESS": { es: "CREAR MI EMPRESA", pt: "ABRIR MINHA EMPRESA" },
   "GET STARTED": { es: "EMPEZAR", pt: "COMEÇAR" },
-  "© 2026 Florida Registered Agent. All rights reserved.": { es: "© 2026 Agente Registrado Florida. Todos los derechos reservados.", pt: "© 2026 Agente Registrado da Flórida. Todos os direitos reservados." },
+  "© 2026 Diler Corporate. All rights reserved.": { es: "© 2026 Diler Corporate. Todos los derechos reservados.", pt: "© 2026 Diler Corporate. Todos os direitos reservados." },
 
   // Hero
   "Form your Florida LLC or corporation, get your EIN and stay compliant — from anywhere in the world.": {
