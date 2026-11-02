@@ -1,4 +1,4 @@
-# Google Business Profile — Agente Registrado Florida
+# Google Business Profile — Diler Corporate
 
 Everything to enter in business.google.com. Prices match `src/lib/catalog.ts`; update both together.
 
@@ -6,7 +6,7 @@ Everything to enter in business.google.com. Prices match `src/lib/catalog.ts`; u
 
 | Field | Value |
 |---|---|
-| Business name | Agente Registrado Florida |
+| Business name | Diler Corporate |
 | Primary category | Business management consultant (type "incorporation" or "registered agent" first and use one if Google offers it) |
 | Additional categories | Business center · Consultant · Business to business service (only categories Google's list actually shows) |
 | Address | Office address (shown on Maps; must be staffed during visiting hours) |
@@ -17,14 +17,14 @@ Everything to enter in business.google.com. Prices match `src/lib/catalog.ts`; u
 | Appointment link | https://agenteregistradofl.com/contact |
 | Languages / attributes | Spanish, English, Portuguese spoken · Online appointments · Onsite services |
 | Opening date | (the date the business started) |
-| Logo | public/apple-touch-icon.png (orange "AR") |
+| Logo | public/apple-touch-icon.png (orange "DC") |
 | Cover photo | public/og-image.jpg (Miami skyline with name) |
 
-Rules to keep the profile safe: the name must be exactly the real business name (no extra keywords like "LLC Florida Barato"); the address must be a real office, not a P.O. box or virtual mailbox; the fictitious name "Agente Registrado Florida" should be registered on Sunbiz before or during verification.
+Rules to keep the profile safe: the name must be exactly the real business name (no extra keywords like "LLC Florida Barato"); the address must be a real office, not a P.O. box or virtual mailbox; the fictitious name "Diler Corporate" should be registered on Sunbiz before or during verification.
 
 ## Description (Spanish, max 750 characters)
 
-Agente Registrado Florida ayuda a emprendedores de EE. UU. y de otros países a formar su LLC o corporación en Florida. Preparamos y presentamos su trámite ante el Estado de Florida (Sunbiz), normalmente en 1 día hábil, le ayudamos a obtener su EIN ante el IRS y actuamos como su agente registrado con dirección en Florida. También ofrecemos paquetes con sitio web profesional de 7 páginas. Atendemos en español, inglés y portugués, con cita previa. Precios claros: la tarifa estatal se muestra aparte. No somos un bufete de abogados y no damos asesoría legal ni fiscal; cuando la necesite, le referimos a contadores y abogados aliados.
+Diler Corporate ayuda a emprendedores de EE. UU. y de otros países a formar su LLC o corporación en Florida. Preparamos y presentamos su trámite ante el Estado de Florida (Sunbiz), normalmente en 1 día hábil, le ayudamos a obtener su EIN ante el IRS y actuamos como su agente registrado con dirección en Florida. También ofrecemos paquetes con sitio web profesional de 7 páginas. Atendemos en español, inglés y portugués, con cita previa. Precios claros: la tarifa estatal se muestra aparte. No somos un bufete de abogados y no damos asesoría legal ni fiscal; cuando la necesite, le referimos a contadores y abogados aliados.
 
 ## Services (name — price — description)
 

@@ -2,8 +2,6 @@ import { LANGS, useLang } from "@/i18n/LanguageContext";
 
 const LanguageSwitcher = ({ className = "" }: { className?: string }) => {
   const { lang, setLang } = useLang();
-  // Diler Corporate is English only, so there is nothing to switch.
-  if (LANGS.length < 2) return null;
   return (
     <div role="group" aria-label="Language" className={`inline-flex items-center rounded-full border border-border p-0.5 ${className}`}>
       {LANGS.map((l) => (

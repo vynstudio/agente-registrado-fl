@@ -9,8 +9,6 @@ import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import CorporateDepartmentSection from "@/components/CorporateDepartmentSection";
-import { BRAND_CONFIG } from "@/lib/brand";
 
 const Index = () => {
   usePageTitle("Florida LLC and corporation formation, EIN and registered agent");
@@ -19,7 +17,6 @@ const Index = () => {
       <Header />
       <main id="main-content" tabIndex={-1} className="pt-32">
         <HeroSection />
-        {BRAND_CONFIG.id === "diler" && <CorporateDepartmentSection />}
         <FeaturesSection />
         <BenefitsSection />
         <HowItWorksSection />

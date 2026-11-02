@@ -4,7 +4,6 @@ import { ShoppingBag01Icon, File01Icon, Tag01Icon, Mail01Icon, UserGroupIcon, Lo
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, useSidebar } from "@/components/ui/sidebar";
-import BrandName from "@/components/BrandName";
 
 const navItems = [{
   title: "Orders",
@@ -85,7 +84,7 @@ const AdminLayoutContent = ({
         {/* Logo Header */}
         <SidebarHeader className="p-6 pb-8 flex flex-row items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap"><BrandName /></span>
+            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap">Diler <span className="text-lime">Corporate</span></span>
           </Link>
           <SidebarToggle />
         </SidebarHeader>

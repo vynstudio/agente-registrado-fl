@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import heroVideo from "@/assets/login-video.mp4";
-import BrandName from "@/components/BrandName";
 
 const passwordSchema = z
   .string()
@@ -108,7 +107,7 @@ const ResetPassword = () => {
           </div>
           {/* Logo */}
           <Link to="/" className="flex items-center mb-8 sm:mb-12 lg:mb-20">
-            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap"><BrandName /></span>
+            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap">Diler <span className="text-lime">Corporate</span></span>
           </Link>
 
           {/* Form container */}

@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import heroVideo from "@/assets/login-video.mp4";
-import BrandName from "@/components/BrandName";
 
 const emailSchema = z
   .string()
@@ -152,7 +151,7 @@ const AdminLogin = () => {
           </div>
           {/* Logo */}
           <Link to="/" className="flex items-center mb-12 lg:mb-20">
-            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap"><BrandName /></span>
+            <span className="text-[17px] font-semibold text-foreground whitespace-nowrap">Diler <span className="text-lime">Corporate</span></span>
           </Link>
 
           {/* Form container */}

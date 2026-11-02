@@ -15,8 +15,6 @@ const schema = z.object({
   environment: z.enum(["sandbox", "live"]),
   returnUrl: z.string().url().max(500),
   language: z.enum(["en", "es", "pt"]).default("en"),
-  // Website the order came from (src/lib/brand.ts): Agente Registrado Florida or Diler Corporate.
-  brand: z.enum(["arf", "diler"]).default("arf"),
   plan: z.enum(["starter", "professional", "international", "business_website"]),
   entityType: z.enum(["llc", "corp"]),
   extras: z.array(z.enum(["ein", "annual_report", "registered_agent", "expedited"])).max(4).default([]),
@@ -53,11 +51,6 @@ const schema = z.object({
   agreedToTerms: z.literal(true),
 });
 
-const BRANDS = {
-  arf: { name: "Agente Registrado Florida", origin: "https://agenteregistradofl.com" },
-  diler: { name: "Diler Corporate", origin: "https://dilercorporate.com" },
-} as const;
-
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
@@ -77,7 +70,7 @@ Deno.serve(async (req) => {
       company_name: d.companyName, alt_company_name: d.altCompanyName || null,
       business_purpose: d.businessPurpose || null, owners: d.owners,
       contact_name: d.contactName, contact_email: d.contactEmail, contact_phone: d.contactPhone,
-      country: d.country, address: d.address, language: d.language, brand: d.brand,
+      country: d.country, address: d.address, language: d.language,
       total_cents: totalCents, environment: env,
       filing: d.filing,
       ein: d.ein ?? null,
@@ -104,11 +97,10 @@ Deno.serve(async (req) => {
 
     const planName = { starter: "Starter", professional: "Professional", international: "International+", business_website: "Business + Website" }[d.plan];
     // Shown above the pay button; also the customer's agreement record if a charge is disputed.
-    const site = BRANDS[d.brand].origin;
     const termsNotice = {
-      en: `By paying, you agree to our [Terms of Service](${site}/terms) and [Refund policy](${site}/refund-policy). Full refund until we submit your filing; state fees paid on your behalf are non-refundable.`,
-      es: `Al pagar, acepta nuestros [Términos del servicio](${site}/terms) y nuestra [Política de reembolsos](${site}/refund-policy). Reembolso completo hasta que presentemos su trámite; las tarifas estatales pagadas en su nombre no son reembolsables.`,
-      pt: `Ao pagar, você aceita nossos [Termos de serviço](${site}/terms) e nossa [Política de reembolso](${site}/refund-policy). Reembolso total até enviarmos seu registro; as taxas estaduais pagas em seu nome não são reembolsáveis.`,
+      en: "By paying, you agree to our [Terms of Service](https://agenteregistradofl.com/terms) and [Refund policy](https://agenteregistradofl.com/refund-policy). Full refund until we submit your filing; state fees paid on your behalf are non-refundable.",
+      es: "Al pagar, acepta nuestros [Términos del servicio](https://agenteregistradofl.com/terms) y nuestra [Política de reembolsos](https://agenteregistradofl.com/refund-policy). Reembolso completo hasta que presentemos su trámite; las tarifas estatales pagadas en su nombre no son reembolsables.",
+      pt: "Ao pagar, você aceita nossos [Termos de serviço](https://agenteregistradofl.com/terms) e nossa [Política de reembolso](https://agenteregistradofl.com/refund-policy). Reembolso total até enviarmos seu registro; as taxas estaduais pagas em seu nome não são reembolsáveis.",
     }[d.language];
     const params = {
       line_items,
@@ -138,7 +130,6 @@ Deno.serve(async (req) => {
     await db.from("orders").update({ stripe_session_id: session.id }).eq("id", order.id);
     // A lead: they reached payment but haven't paid yet. A separate alert follows if they pay.
     await sendAlert(`${env === "sandbox" ? "[TEST] " : ""}🟡 New lead — checkout started`, [
-      ["Website", BRANDS[d.brand].name],
       ["Company", d.companyName],
       ["Package", `${planName} · ${d.entityType === "llc" ? "LLC" : "Corporation"}`],
       ["Total", money(totalCents)],

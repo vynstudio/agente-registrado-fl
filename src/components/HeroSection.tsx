@@ -3,10 +3,6 @@ import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Photo from "@/components/Photo";
-import { BRAND_CONFIG } from "@/lib/brand";
-
-// Diler Corporate (English site) leads with its tagline; Agente Registrado Florida with its name.
-const isDiler = BRAND_CONFIG.id === "diler";
 
 const HeroSection = () => {
   const { t, lang } = useLang();
@@ -20,21 +16,13 @@ const HeroSection = () => {
           className="text-center max-w-4xl mx-auto mb-8"
         >
           {/* Main Headline */}
-          {isDiler ? (
-            <h1 className="text-[40px] sm:text-[52px] md:text-[64px] font-medium text-foreground leading-[1.05] mb-6 text-balance">
-              {t("You bring the idea. We handle the corporate.")}
-            </h1>
-          ) : (
-            <h1 className="text-[44px] sm:text-[60px] md:text-[76px] font-medium text-foreground leading-none mb-6 text-balance">
-              {BRAND[lang]}
-            </h1>
-          )}
+          <h1 className="text-[44px] sm:text-[60px] md:text-[76px] font-medium text-foreground leading-none mb-6 text-balance">
+            {BRAND[lang]}
+          </h1>
 
           {/* Subheadline */}
           <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8">
-            {isDiler
-              ? t("Diler Corporate is the corporate department for founders in the US and around the world. We form your Florida LLC or corporation, get your EIN and serve as your registered agent.")
-              : t("Form your Florida LLC or corporation, get your EIN and stay compliant — from anywhere in the world.")}
+            {t("Form your Florida LLC or corporation, get your EIN and stay compliant — from anywhere in the world.")}
           </p>
 
           {/* CTA Buttons */}

@@ -17,7 +17,6 @@ import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { EXTRAS, INCLUDED, PLANS, STATE_FEE, money, orderTotal, type Entity, type Extra, type Plan } from "@/lib/catalog";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { ACTIVITIES, ROLES, SUFFIXES, TAX_ID_CHOICES, fullCompanyName } from "@/lib/filing";
-import { BRAND_CONFIG } from "@/lib/brand";
 
 type Owner = { name: string; ownership: string; role: string; address: string };
 
@@ -124,7 +123,7 @@ const Start = () => {
         body: {
           environment: getStripeEnvironment(),
           returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
-          language: lang, brand: BRAND_CONFIG.id, plan, entityType: entity, extras: chosen,
+          language: lang, plan, entityType: entity, extras: chosen,
           companyName: fullCompanyName(form.companyName, nameEnding, entity),
           altCompanyName: form.altCompanyName.trim() ? fullCompanyName(form.altCompanyName, nameEnding, entity) : "",
           businessPurpose: form.businessPurpose,

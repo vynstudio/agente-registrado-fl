@@ -30,7 +30,6 @@ interface Order {
   country: string;
   address: string;
   language: string;
-  brand: "arf" | "diler";
   total_cents: number;
   status: string;
   environment: string;
@@ -89,7 +88,7 @@ const AdminOrders = () => {
                 </div>
               </div>
               <p className="text-[13px] text-muted-foreground mt-1">
-                ${(o.total_cents / 100).toFixed(2)} · {new Date(o.created_at).toLocaleString()} · lang {o.language.toUpperCase()} · {o.brand === "diler" ? "dilercorporate.com" : "agenteregistradofl.com"}
+                ${(o.total_cents / 100).toFixed(2)} · {new Date(o.created_at).toLocaleString()} · lang {o.language.toUpperCase()}
               </p>
               <div className="mt-3 grid sm:grid-cols-2 gap-3 text-sm text-foreground">
                 <div>

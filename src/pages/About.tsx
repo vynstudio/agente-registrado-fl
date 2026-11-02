@@ -36,7 +36,7 @@ const About = () => {
             {t("Florida business formation for US and international founders")}
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-12">
-            {t("{brand} helps entrepreneurs form a Florida LLC or corporation, get an EIN, and keep a registered agent in Florida. We handle the paperwork so you can focus on your business.")}
+            {t("Diler Corporate helps entrepreneurs form a Florida LLC or corporation, get an EIN, and keep a registered agent in Florida. We handle the paperwork so you can focus on your business.")}
           </p>
           <div className="h-[220px] sm:h-[380px] overflow-hidden rounded-[24px] mb-12">
             <Photo name="man-leading-team" priority sizes="(min-width: 928px) 896px, calc(100vw - 32px)" className="w-full h-full" />

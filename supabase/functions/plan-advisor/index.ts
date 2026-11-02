@@ -12,8 +12,6 @@ const json = (body: unknown, status = 200) =>
 const input = z.object({
   description: z.string().trim().min(20).max(2000),
   language: z.enum(["en", "es", "pt"]).default("en"),
-  // Website asking (src/lib/brand.ts), so the advisor uses that brand's name.
-  brand: z.enum(["arf", "diler"]).default("arf"),
 });
 
 const recommendation = z.object({
@@ -41,9 +39,8 @@ const recommendationJsonSchema = {
 };
 
 const LANG = { en: "English", es: "Spanish", pt: "Brazilian Portuguese" } as const;
-const BRAND_NAME = { arf: "Agente Registrado Florida", diler: "Diler Corporate" } as const;
 
-const instructions = (lang: keyof typeof LANG, brand: keyof typeof BRAND_NAME) => `You help visitors of "${BRAND_NAME[brand]}", a Florida business formation service, pick a company type and package.
+const instructions = (lang: keyof typeof LANG) => `You help visitors of "Diler Corporate", a Florida business formation service, pick a company type and package.
 You are NOT a lawyer or accountant and must not give legal or tax advice. Give general, educational guidance only.
 
 Company types:
@@ -83,7 +80,7 @@ Deno.serve(async (req) => {
         // On a safety decline, the API re-runs the request on a fallback model in the same call.
         betas: ["server-side-fallback-2026-07-01"],
         fallbacks: "default",
-        system: instructions(parsed.data.language, parsed.data.brand),
+        system: instructions(parsed.data.language),
         messages: [{ role: "user", content: parsed.data.description }],
       },
       { signal: req.signal },
