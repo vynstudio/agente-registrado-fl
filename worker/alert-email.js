@@ -5,7 +5,7 @@
 import { EmailMessage } from "cloudflare:email";
 
 const FROM = "alertas@agenteregistradofl.com";
-const FROM_NAME = "Diler Corporate";
+const FROM_NAME = "Agente Registrado Florida";
 
 const b64 = (text) => btoa(String.fromCharCode(...new TextEncoder().encode(text)));
 // RFC 2047 encoded header so accents and emoji survive.

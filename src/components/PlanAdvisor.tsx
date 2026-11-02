@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLang } from "@/i18n/LanguageContext";
 import { PLANS, type Entity, type Extra, type Plan } from "@/lib/catalog";
+import { BRAND_CONFIG } from "@/lib/brand";
 
 export interface Recommendation {
   entityType: Entity;
@@ -31,7 +32,7 @@ const PlanAdvisor = ({ onApply }: { onApply?: (r: Recommendation) => void }) => 
     setError(null);
     setRec(null);
     const { data, error } = await supabase.functions.invoke("plan-advisor", {
-      body: { description, language: lang },
+      body: { description, language: lang, brand: BRAND_CONFIG.id },
     });
     setLoading(false);
     if (error || !data?.recommendation) {

@@ -19,6 +19,10 @@
   "routes": [
     { "pattern": "agenteregistradofl.com", "custom_domain": true },
     { "pattern": "www.agenteregistradofl.com", "custom_domain": true }
+    // Diler Corporate (English site, see src/lib/brand.ts). Uncomment once dilercorporate.com is
+    // added to this Cloudflare account, or deploys fail:
+    // ,{ "pattern": "dilercorporate.com", "custom_domain": true }
+    // ,{ "pattern": "www.dilercorporate.com", "custom_domain": true }
   ],
   "assets": {
     "directory": "./dist",

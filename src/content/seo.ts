@@ -36,7 +36,7 @@ export const SEO_PAGES: Record<string, { title: string; description: string }> =
   },
   "/terms": {
     title: "Terms of Service",
-    description: "Terms of service for Florida company formation, EIN, registered agent and website services ordered on agenteregistradofl.com.",
+    description: "Terms of service for Florida company formation, EIN, registered agent and website services ordered on {domain}.",
   },
   "/refund-policy": {
     title: "Refund policy",

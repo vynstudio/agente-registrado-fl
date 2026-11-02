@@ -1,13 +1,13 @@
-// "Back soon" page shown by worker/index.js while MAINTENANCE is "on".
+// "Back soon" page shown by worker/index.js while MAINTENANCE is "on", in each brand's name and language.
 // Turn off: npx wrangler deploy --var MAINTENANCE:off  (or set "off" in wrangler.jsonc)
 
-const page = `<!doctype html>
+const spanish = (brand) => `<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>En mantenimiento | Diler Corporate</title>
+<title>En mantenimiento | ${brand.name.es}</title>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
@@ -25,7 +25,7 @@ const page = `<!doctype html>
 </head>
 <body>
 <main>
-  <div class="brand">Diler <span>Corporate</span></div>
+  <div class="brand">${brandName(brand, "es")}</div>
   <h1>Estamos en mantenimiento</h1>
   <p>Volvemos pronto.</p>
   <div class="other">
@@ -36,7 +36,17 @@ const page = `<!doctype html>
 </body>
 </html>`;
 
-export const maintenancePage = () => new Response(page, {
+// Diler Corporate is English only.
+const english = (brand) => spanish(brand)
+  .replace('<html lang="es">', '<html lang="en">')
+  .replace(/<title>[^<]*<\/title>/, `<title>Under maintenance | ${brand.name.en}</title>`)
+  .replace(/<div class="brand">[^]*?<\/div>/, `<div class="brand">${brandName(brand, "en")}</div>`)
+  .replace(/<h1>[^]*<\/main>/, "<h1>We're under maintenance</h1>\n  <p>We'll be back soon.</p>\n</main>");
+
+// Brand name with its highlighted word in the accent color.
+const brandName = (brand, lang) => brand.name[lang].replace(brand.highlight, "<span>$1</span>");
+
+export const maintenancePage = (brand) => new Response(brand.langs[0] === "es" ? spanish(brand) : english(brand), {
   status: 503,
   headers: {
     "content-type": "text/html; charset=utf-8",
