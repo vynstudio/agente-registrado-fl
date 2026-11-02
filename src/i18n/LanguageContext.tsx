@@ -31,7 +31,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 export const useLang = () => useContext(LanguageContext);
 
 // Brand name shown in each site language.
-export const BRAND: Record<Lang, string> = { en: "Diler Corporate", es: "Diler Corporate", pt: "Diler Corporate" };
+export const BRAND: Record<Lang, string> = { en: "Florida Registered Agent", es: "Agente Registrado Florida", pt: "Agente Registrado da Flórida" };
 
 // Locale used to format dates for each site language.
 export const LOCALES: Record<Lang, string> = { en: "en-US", es: "es-US", pt: "pt-BR" };
