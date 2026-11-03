@@ -34,7 +34,7 @@ export const publicPages = {
   },
   "privacy": {
     "title": "Privacy policy",
-    "updated": "Updated October 28, 2026",
+    "updated": "Updated November 3, 2026",
     "intro": "Diler Services, LLC operates Florida Registered Agent. This policy explains what information we collect on agenteregistradofl.com, how we use it and who we share it with.",
     "sections": [
       {
@@ -48,6 +48,12 @@ export const publicPages = {
         "paragraphs": [
           "Order information is used to prepare and file the services you order and to communicate with you about your order. Stripe processes card payments and, with your authorization, keeps your card and billing address on file so we can charge state fees and renewals; we never see or store your full card number, only the card brand and last four digits. Descriptions you type into the AI plan advisor are sent to Anthropic, our AI provider, to generate a general recommendation, so avoid sensitive information in them.",
           "When you authorize a filing at checkout, we save your typed name, the date and time, your IP address and browser type as a record of your authorization. We never ask for Social Security numbers or ITINs on the website; if one is needed for an EIN application, we get it from you by phone and do not store it."
+        ]
+      },
+      {
+        "title": "Monthly plans and mail",
+        "paragraphs": [
+          "If you choose a monthly plan, Stripe keeps your plan subscription and bills your saved card each month until you cancel. With the Compliance Plus plan, mail sent to your company at our Florida business address is opened and scanned, and the scans are sent to you; we keep the scans and the paper mail only as long as needed to deliver them to you, unless you ask us to forward or hold it."
         ]
       },
       {

@@ -63,6 +63,14 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Los datos del pedido se usan para preparar y presentar los servicios que solicita y para comunicarnos con usted sobre su pedido. Stripe procesa los pagos con tarjeta y, con su autorización, guarda su tarjeta y dirección de facturación para que podamos cobrar tarifas estatales y renovaciones; nunca vemos ni guardamos el número completo de su tarjeta, solo la marca y los últimos cuatro dígitos. Las descripciones que escribe en el asesor de planes con IA se envían a Anthropic, nuestro proveedor de IA, para generar una recomendación general, así que evite incluir información sensible.",
     "pt": "Os dados do pedido são usados para preparar e protocolar os serviços solicitados e para nos comunicarmos com você sobre o pedido. A Stripe processa os pagamentos com cartão e, com sua autorização, guarda seu cartão e endereço de cobrança para cobrarmos taxas estaduais e renovações; nunca vemos nem guardamos o número completo do seu cartão, apenas a bandeira e os quatro últimos dígitos. As descrições digitadas no assistente de planos com IA são enviadas à Anthropic, nossa fornecedora de IA, para gerar uma recomendação geral, então evite informações sensíveis."
   },
+  "Monthly plans and mail": {
+    "es": "Planes mensuales y correo",
+    "pt": "Planos mensais e correspondência"
+  },
+  "If you choose a monthly plan, Stripe keeps your plan subscription and bills your saved card each month until you cancel. With the Compliance Plus plan, mail sent to your company at our Florida business address is opened and scanned, and the scans are sent to you; we keep the scans and the paper mail only as long as needed to deliver them to you, unless you ask us to forward or hold it.": {
+    "es": "Si elige un plan mensual, Stripe guarda la suscripción de su plan y cobra cada mes a su tarjeta guardada hasta que lo cancele. Con el plan Cumplimiento Plus, el correo enviado a su empresa en nuestra dirección comercial de Florida se abre y se escanea, y le enviamos los escaneos; conservamos los escaneos y el correo en papel solo el tiempo necesario para entregárselos, salvo que nos pida reenviarlo o guardarlo.",
+    "pt": "Se você escolher um plano mensal, a Stripe mantém a assinatura do seu plano e cobra todo mês no seu cartão salvo até você cancelar. Com o plano Conformidade Plus, a correspondência enviada à sua empresa no nosso endereço comercial na Flórida é aberta e digitalizada, e enviamos as digitalizações para você; guardamos as digitalizações e a correspondência em papel apenas pelo tempo necessário para entregá-las, a menos que você peça para reenviá-la ou guardá-la."
+  },
   "Public records and referrals": {
     "es": "Registros públicos y referencias",
     "pt": "Registros públicos e indicações"

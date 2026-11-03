@@ -149,6 +149,8 @@ Deno.serve(async (req) => {
       billing_address_collection: "required",
       // Cards only: the saved payment method must be chargeable later for state fees and renewals.
       payment_method_types: ["card"],
+      // Link would otherwise offer bank payments ("Banco") inside the card form.
+      wallet_options: { link: { display: "never" } },
       // Keeps the card in Stripe for the state fee and renewals the client authorized
       // (a subscription saves it on its own).
       ...(monthly
