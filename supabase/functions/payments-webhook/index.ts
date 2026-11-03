@@ -8,17 +8,43 @@ const db = () => (_db ??= createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.g
 
 const PLAN_NAMES: Record<string, string> = { starter: "Starter", professional: "Professional", international: "International+", business_website: "Business + Website" };
 
+const MONTHLY_NAMES: Record<string, string> = { compliance: "Compliance", compliance_plus: "Compliance Plus" };
+
 // The card Stripe saved at checkout, for the state fee and renewals the client authorized.
+// A monthly plan checkout keeps it on the subscription instead of a one-time payment.
 async function savedCard(session: any, env: StripeEnv) {
-  if (typeof session.payment_intent !== "string") return {};
-  const pi = await createStripeClient(env).paymentIntents.retrieve(session.payment_intent, { expand: ["payment_method"] });
-  const pm = pi.payment_method;
+  const stripe = createStripeClient(env);
+  let pm: any, customer: any;
+  if (typeof session.subscription === "string") {
+    const sub = await stripe.subscriptions.retrieve(session.subscription, { expand: ["default_payment_method"] });
+    [pm, customer] = [sub.default_payment_method, sub.customer];
+  } else if (typeof session.payment_intent === "string") {
+    const pi = await stripe.paymentIntents.retrieve(session.payment_intent, { expand: ["payment_method"] });
+    [pm, customer] = [pi.payment_method, pi.customer];
+  }
   if (!pm || typeof pm === "string") return {};
   return {
-    stripe_customer_id: typeof session.customer === "string" ? session.customer : pi.customer,
+    stripe_customer_id: typeof session.customer === "string" ? session.customer : customer,
     stripe_payment_method_id: pm.id,
     card_label: pm.card ? `${pm.card.brand} •••• ${pm.card.last4}` : pm.type,
+    ...(typeof session.subscription === "string" && { stripe_subscription_id: session.subscription, subscription_status: "active" }),
   };
+}
+
+// Monthly plan changes after checkout: a failed monthly payment or a cancellation needs a call to the client.
+async function subscriptionEvent(subscriptionId: string | undefined, env: StripeEnv, status: string | null, title?: string) {
+  if (!subscriptionId) return;
+  const q = db().from("orders").select("*").eq("stripe_subscription_id", subscriptionId).eq("environment", env);
+  const { data: order } = await (status ? db().from("orders").update({ subscription_status: status })
+    .eq("stripe_subscription_id", subscriptionId).eq("environment", env).neq("subscription_status", status).select("*").maybeSingle()
+    : q.maybeSingle());
+  if (!order || !title) return;
+  await sendAlert(`${env === "sandbox" ? "[TEST] " : ""}${title}`, [
+    ["Company", order.company_name],
+    ["Plan", `${MONTHLY_NAMES[order.monthly_plan] ?? order.monthly_plan} · ${order.card_label ?? ""}`],
+    ["Client", `${order.contact_name} · ${order.contact_phone}`],
+    ["Details", ADMIN_ORDERS_URL],
+  ]);
 }
 
 async function setStatus(session: any, env: StripeEnv, status: string) {
@@ -36,6 +62,7 @@ async function setStatus(session: any, env: StripeEnv, status: string) {
       ["Company", order.company_name],
       ["Package", `${PLAN_NAMES[order.plan] ?? order.plan} · ${order.entity_type === "llc" ? "LLC" : "Corporation"}`],
       ["Add-ons", order.extras?.join(", ")],
+      ["Monthly plan", order.monthly_plan ? MONTHLY_NAMES[order.monthly_plan] : undefined],
       ["Paid", money(order.total_cents)],
       ["State fee to charge", order.state_fee_cents ? `${money(order.state_fee_cents)} to ${order.card_label ?? "saved card"} when filing` : undefined],
       ["Client", order.contact_name],
@@ -70,6 +97,16 @@ Deno.serve(async (req) => {
         break;
       case "checkout.session.expired":
         await setStatus(s, env, "abandoned");
+        break;
+      case "customer.subscription.updated":
+        // past_due / unpaid after failed retries; active again once paid.
+        await subscriptionEvent(s.id, env, s.status, s.status === "unpaid" ? "⚠️ Monthly plan unpaid — call client" : undefined);
+        break;
+      case "customer.subscription.deleted":
+        await subscriptionEvent(s.id, env, "canceled", "🔴 Monthly plan canceled");
+        break;
+      case "invoice.payment_failed":
+        await subscriptionEvent(s.parent?.subscription_details?.subscription ?? s.subscription, env, null, "⚠️ Monthly plan payment failed");
         break;
       default:
         console.log("Unhandled event:", event.type);

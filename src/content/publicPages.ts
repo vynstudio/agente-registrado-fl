@@ -187,7 +187,7 @@ export const publicPages = {
   "terms": {
     "title": "Terms of Service",
     "intro": "These terms apply to services ordered on agenteregistradofl.com from Diler Services, LLC, which operates Florida Registered Agent (\"we\", \"us\"). By placing an order you agree to these terms and to our Refund policy.",
-    "updated": "Updated October 28, 2026",
+    "updated": "Updated November 3, 2026",
     "sections": [
       {
         "title": "Our services",
@@ -213,6 +213,14 @@ export const publicPages = {
           "When you order, you authorize us to keep your card on file with Stripe, together with your billing address. We charge it the exact Florida state filing fees for your order when we submit your filing, and we pay the State of Florida on your behalf.",
           "Unless you cancel, we also charge the saved card each year for registered agent service renewal ($119) and annual report filing ($119 plus the Florida annual report fee), and we contact you before each renewal charge. You can cancel future charges, or ask us to use a different card, at any time by calling (863) 450-1800 or through our contact page.",
           "If a charge to the saved card is declined, we will contact you before submitting the filing or renewal."
+        ]
+      },
+      {
+        "title": "Monthly plans",
+        "paragraphs": [
+          "Our Compliance ($19 per month) and Compliance Plus ($39 per month) plans are optional. A plan starts on the day you order, is charged to your saved card every month through Stripe, and renews until you cancel. While the plan is active it covers registered agent service and the yearly annual report filing, so the yearly renewal charges above do not apply.",
+          "Florida's annual report fee is not included in the monthly price. We charge it to your saved card once a year when we file your annual report. Other state fees, such as those for amendments or certificates of status, are charged the same way when the service is used.",
+          "You can cancel a plan at any time by calling (863) 450-1800 or through our contact page. Cancellation stops future monthly charges; months already paid are not refunded. If you cancel, registered agent service continues until the end of the current plan year, and you may renew it yearly instead."
         ]
       },
       {

@@ -14,6 +14,6 @@ export const faqs = [
   },
   {
     question: "What does a registered agent do?",
-    answer: "A registered agent receives legal notices and official state mail for your company. Florida requires every company to have one. Ours is included for the first year, then $119/year.",
+    answer: "A registered agent receives legal notices and official state mail for your company. Florida requires every company to have one. Ours is included for the first year, then $119/year, or covered by our monthly plans from $19/month.",
   },
 ];

@@ -3,6 +3,7 @@
 export type Plan = "starter" | "professional" | "international" | "business_website";
 export type Entity = "llc" | "corp";
 export type Extra = "ein" | "annual_report" | "registered_agent" | "expedited";
+export type Monthly = "compliance" | "compliance_plus";
 
 export const PLANS: { id: Plan; name: string; price: number; tagline: string; features: string[] }[] = [
   {
@@ -62,6 +63,37 @@ export const PLANS: { id: Plan; name: string; price: number; tagline: string; fe
   },
 ];
 
+// Optional monthly plans (Stripe subscription from checkout). Amounts must match MONTHLY_PRICES
+// in supabase/functions/_shared/catalog.ts.
+export const MONTHLY_PLANS: { id: Monthly; name: string; price: number; tagline: string; features: string[] }[] = [
+  {
+    id: "compliance",
+    name: "Compliance",
+    price: 19,
+    tagline: "Keep your company active with the state, without tracking deadlines.",
+    features: [
+      "Registered agent service, renewed every year",
+      "Annual report filed with Sunbiz every year (+ state fee)",
+      "State notices and legal papers scanned to you the same day",
+      "Deadline reminders and Sunbiz status monitoring",
+    ],
+  },
+  {
+    id: "compliance_plus",
+    name: "Compliance Plus",
+    price: 39,
+    tagline: "For companies that need a Florida business address.",
+    features: [
+      "Everything in Compliance",
+      "Florida business address for your company",
+      "Unlimited mail scanning",
+      "Address changes and amendments filed at no service fee (+ state fee)",
+      "Certificate of status every year (+ state fee)",
+      "Priority phone support in Spanish, English and Portuguese",
+    ],
+  },
+];
+
 export const STATE_FEE: Record<Entity, number> = { llc: 125, corp: 70 };
 export const ANNUAL_REPORT_FEE: Record<Entity, number> = { llc: 138.75, corp: 150 };
 
@@ -79,14 +111,20 @@ export const INCLUDED: Record<Plan, Extra[]> = {
   business_website: ["registered_agent", "ein", "expedited"],
 };
 
-// Today's checkout charge (our service fees) and the state fees charged later to the saved card.
-// Must match buildLineItems in supabase/functions/_shared/catalog.ts.
-export function orderTotal(plan: Plan, entity: Entity, extras: Extra[]) {
+// A monthly plan covers the annual report, so that add-on isn't sold with one.
+export const includedWith = (plan: Plan, monthly: Monthly | null): Extra[] =>
+  [...INCLUDED[plan], ...(monthly ? ["annual_report" as const] : [])];
+
+// Today's checkout charge (our service fees plus a monthly plan's first month) and the state fees
+// charged later to the saved card. Must match buildLineItems in supabase/functions/_shared/catalog.ts.
+export function orderTotal(plan: Plan, entity: Entity, extras: Extra[], monthly: Monthly | null = null) {
   const p = PLANS.find((x) => x.id === plan)!;
   const lines: { label: string; amount: number }[] = [{ label: `${p.name} package`, amount: p.price }];
   const stateLines: { label: string; amount: number }[] = [{ label: "Florida state filing fee", amount: STATE_FEE[entity] }];
+  const m = MONTHLY_PLANS.find((x) => x.id === monthly);
+  if (m) lines.push({ label: `${m.name} plan (first month)`, amount: m.price });
   for (const e of extras) {
-    if (INCLUDED[plan].includes(e)) continue;
+    if (includedWith(plan, monthly).includes(e)) continue;
     const x = EXTRAS.find((y) => y.id === e)!;
     lines.push({ label: x.name, amount: x.price });
     if (e === "annual_report") stateLines.push({ label: "Florida annual report state fee", amount: ANNUAL_REPORT_FEE[entity] });

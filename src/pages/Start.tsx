@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useLang } from "@/i18n/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
-import { EXTRAS, INCLUDED, PLANS, STATE_FEE, money, orderTotal, type Entity, type Extra, type Plan } from "@/lib/catalog";
+import { ANNUAL_REPORT_FEE, EXTRAS, INCLUDED, MONTHLY_PLANS, PLANS, STATE_FEE, includedWith, money, orderTotal, type Entity, type Extra, type Monthly, type Plan } from "@/lib/catalog";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { ACTIVITIES, ROLES, SUFFIXES, TAX_ID_CHOICES, fullCompanyName } from "@/lib/filing";
 
@@ -22,6 +22,8 @@ type Owner = { name: string; ownership: string; role: string; address: string };
 
 const isPlan = (v: string | null): v is Plan =>
   v === "starter" || v === "professional" || v === "international" || v === "business_website";
+
+const isMonthly = (v: string | null): v is Monthly => v === "compliance" || v === "compliance_plus";
 
 const Start = () => {
   const { t, lang } = useLang();
@@ -31,6 +33,7 @@ const Start = () => {
   const [plan, setPlan] = useState<Plan>(isPlan(params.get("plan")) ? (params.get("plan") as Plan) : "professional");
   const [entity, setEntity] = useState<Entity>(params.get("entity") === "corp" ? "corp" : "llc");
   const [extras, setExtras] = useState<Extra[]>([]);
+  const [monthly, setMonthly] = useState<Monthly | null>(isMonthly(params.get("monthly")) ? (params.get("monthly") as Monthly) : null);
   const [form, setForm] = useState({
     companyName: "", altCompanyName: "", businessPurpose: "",
     contactName: "", contactEmail: "", contactPhone: "", country: "", address: "",
@@ -51,8 +54,9 @@ const Start = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  const available = EXTRAS.filter((x) => !INCLUDED[plan].includes(x.id));
-  const chosen = extras.filter((e) => !INCLUDED[plan].includes(e));
+  const available = EXTRAS.filter((x) => !includedWith(plan, monthly).includes(x.id));
+  const chosen = extras.filter((e) => !includedWith(plan, monthly).includes(e));
+  const monthlyPlan = MONTHLY_PLANS.find((m) => m.id === monthly);
   const needsEin = INCLUDED[plan].includes("ein") || chosen.includes("ein");
   const nameEnding = SUFFIXES[entity].includes(suffix) ? suffix : SUFFIXES[entity][0];
   // Member-managed LLC owners are all members; otherwise each person picks a role.
@@ -63,7 +67,7 @@ const Start = () => {
     : (i === 0 ? "Member and manager" : "Member");
   const today = new Date().toISOString().slice(0, 10);
   const maxEffective = new Date(Date.now() + 90 * 864e5).toISOString().slice(0, 10);
-  const summary = useMemo(() => orderTotal(plan, entity, chosen), [plan, entity, chosen]);
+  const summary = useMemo(() => orderTotal(plan, entity, chosen, monthly), [plan, entity, chosen, monthly]);
 
   const applyRec = (r: Recommendation) => {
     setPlan(r.plan);
@@ -125,7 +129,7 @@ const Start = () => {
         body: {
           environment: getStripeEnvironment(),
           returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
-          language: lang, plan, entityType: entity, extras: chosen,
+          language: lang, plan, entityType: entity, extras: chosen, monthlyPlan: monthly,
           companyName: fullCompanyName(form.companyName, nameEnding, entity),
           altCompanyName: form.altCompanyName.trim() ? fullCompanyName(form.altCompanyName, nameEnding, entity) : "",
           businessPurpose: form.businessPurpose,
@@ -259,6 +263,32 @@ const Start = () => {
                         </div>
                       </>
                     )}
+
+                    <h2 className="text-xl font-semibold text-foreground pt-4">{t("Monthly plan")} <span className="text-sm font-normal text-muted-foreground">{t("(optional)")}</span></h2>
+                    <p className="text-sm text-muted-foreground -mt-2">{t("Keeps your company in good standing after it's formed. Cancel anytime.")}</p>
+                    <div className="grid sm:grid-cols-3 gap-3" role="radiogroup" aria-label={t("Monthly plan")}>
+                      {[null, ...MONTHLY_PLANS].map((m) => (
+                        <button key={m?.id ?? "none"} type="button" role="radio" aria-checked={monthly === (m?.id ?? null)} onClick={() => setMonthly(m?.id ?? null)}
+                          className={`text-left flex flex-col justify-start h-full rounded-2xl border p-4 transition-colors ${monthly === (m?.id ?? null) ? "border-accent bg-accent/5" : "border-border hover:border-foreground/30"}`}>
+                          {m ? (
+                            <>
+                              <p className="font-semibold text-foreground">{t(m.name)}</p>
+                              <p className="text-2xl font-bold text-foreground mt-1">{money(m.price)}<span className="text-xs font-normal text-muted-foreground">{t("/month")}</span></p>
+                              <ul className="mt-3 space-y-1.5">
+                                {m.features.map((f) => (
+                                  <li key={f} className="flex gap-1.5 text-xs text-foreground"><Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-accent" />{t(f)}</li>
+                                ))}
+                              </ul>
+                            </>
+                          ) : (
+                            <>
+                              <p className="font-semibold text-foreground">{t("No monthly plan")}</p>
+                              <p className="mt-1 text-xs text-muted-foreground">{t("Registered agent ($119) and annual report ($119 + state fee) renew once a year instead.")}</p>
+                            </>
+                          )}
+                        </button>
+                      ))}
+                    </div>
                   </section>
                   <Button onClick={() => { setStep(2); window.scrollTo({ top: 0 }); }} className="rounded-full">{t("Continue")}</Button>
                 </>
@@ -389,7 +419,11 @@ const Start = () => {
                     {/* Same wording as supabase/functions/_shared/card-authorization.ts, which stores it on the order. */}
                     <label className="flex items-start gap-3 text-sm text-foreground cursor-pointer">
                       <Checkbox className="mt-0.5" checked={cardAuthorized} onCheckedChange={(c) => setCardAuthorized(!!c)} aria-invalid={!!errors.cardAuthorized} />
-                      <span>{t("I authorize Diler Services, LLC to save my card with Stripe and to charge it (1) {amount} for the Florida state filing fees of this order, when the filing is submitted, and (2) until I cancel, for the yearly renewal of registered agent service ($119) and annual report filing ($119 plus the Florida annual report fee), with notice before each renewal charge. I can cancel future charges at any time by contacting Diler Services, LLC.").replace("{amount}", `$${summary.stateTotal.toFixed(2)}`)}</span>
+                      <span>{monthlyPlan
+                        ? t("I authorize Diler Services, LLC to save my card with Stripe and to charge it (1) {amount} for the Florida state filing fees of this order, when the filing is submitted, (2) {monthly} per month for the {plan}, starting today, until I cancel, and (3) once a year while the plan is active, the Florida annual report fee ({annual}) when the annual report is filed. I can cancel the plan and future charges at any time by contacting Diler Services, LLC.")
+                            .replace("{amount}", `$${summary.stateTotal.toFixed(2)}`).replace("{monthly}", `$${monthlyPlan.price.toFixed(2)}`)
+                            .replace("{plan}", t(`${monthlyPlan.name} plan`)).replace("{annual}", `$${ANNUAL_REPORT_FEE[entity].toFixed(2)}`)
+                        : t("I authorize Diler Services, LLC to save my card with Stripe and to charge it (1) {amount} for the Florida state filing fees of this order, when the filing is submitted, and (2) until I cancel, for the yearly renewal of registered agent service ($119) and annual report filing ($119 plus the Florida annual report fee), with notice before each renewal charge. I can cancel future charges at any time by contacting Diler Services, LLC.").replace("{amount}", `$${summary.stateTotal.toFixed(2)}`)}</span>
                     </label>
                     {errors.cardAuthorized && <p className="text-xs text-destructive">{errors.cardAuthorized}</p>}
                     {field("signatureName", "Type your full name as your signature")}
@@ -425,12 +459,14 @@ const Start = () => {
               <div className="mt-3 pt-3 border-t border-border flex justify-between font-semibold text-foreground">
                 <span>{t("Due today")}</span><span data-testid="order-total">{money(summary.total)}</span>
               </div>
+              {monthlyPlan && <p className="mt-1 text-xs text-muted-foreground">{t("Then {price}/month for the {plan}. Cancel anytime.").replace("{price}", money(monthlyPlan.price)).replace("{plan}", t(`${monthlyPlan.name} plan`))}</p>}
               <p className="mt-5 text-sm font-medium text-foreground">{t("Charged to your saved card when we file")}</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {summary.stateLines.map((l) => (
                   <li key={l.label} className="flex justify-between gap-3"><span className="text-muted-foreground">{t(l.label)}</span><span className="text-muted-foreground">{money(l.amount)}</span></li>
                 ))}
               </ul>
+              {monthlyPlan && <p className="mt-2 text-xs text-muted-foreground">{t("Each year: Florida annual report fee ({fee}), when we file your annual report.").replace("{fee}", money(ANNUAL_REPORT_FEE[entity]))}</p>}
               <p className="mt-3 text-xs text-muted-foreground">{t("We pay the State of Florida on your behalf and charge your saved card the exact state fee, as you authorize at checkout. Sales tax, if any, is shown at checkout.")}</p>
             </aside>
           </div>

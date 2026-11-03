@@ -37,6 +37,8 @@ interface Order {
   card_authorization: string | null;
   stripe_payment_method_id: string | null;
   card_label: string | null;
+  monthly_plan: "compliance" | "compliance_plus" | null;
+  subscription_status: string | null;
   status: string;
   environment: string;
   created_at: string;
@@ -55,12 +57,16 @@ interface Charge {
 
 // Charges to the client's saved card; amounts are set by the charge-saved-card function and shown here
 // from src/lib/catalog.ts for the confirmation prompt.
-type ChargeKind = "state_fee" | "annual_report_renewal" | "registered_agent_renewal";
-const CHARGE_KINDS: { kind: ChargeKind; label: string; amount: (o: Order) => number }[] = [
-  { kind: "state_fee", label: "Charge state fee", amount: (o) => (o.state_fee_cents ?? 0) / 100 },
-  { kind: "annual_report_renewal", label: "Charge annual report renewal", amount: (o) => 119 + ANNUAL_REPORT_FEE[o.entity_type as "llc" | "corp"] },
-  { kind: "registered_agent_renewal", label: "Charge registered agent renewal", amount: () => 119 },
+// Clients on an active monthly plan already pay for our renewals, so only Florida's annual report fee is charged.
+type ChargeKind = "state_fee" | "annual_report_renewal" | "registered_agent_renewal" | "annual_report_state_fee";
+const onPlan = (o: Order) => !!o.monthly_plan && o.subscription_status !== "canceled";
+const CHARGE_KINDS: { kind: ChargeKind; label: string; amount: (o: Order) => number; show: (o: Order) => boolean }[] = [
+  { kind: "state_fee", label: "Charge state fee", amount: (o) => (o.state_fee_cents ?? 0) / 100, show: () => true },
+  { kind: "annual_report_renewal", label: "Charge annual report renewal", amount: (o) => 119 + ANNUAL_REPORT_FEE[o.entity_type as "llc" | "corp"], show: (o) => !onPlan(o) },
+  { kind: "registered_agent_renewal", label: "Charge registered agent renewal", amount: () => 119, show: (o) => !onPlan(o) },
+  { kind: "annual_report_state_fee", label: "Charge annual report state fee", amount: (o) => ANNUAL_REPORT_FEE[o.entity_type as "llc" | "corp"], show: onPlan },
 ];
+const MONTHLY_NAMES = { compliance: "Compliance $19/mo", compliance_plus: "Compliance Plus $39/mo" };
 const usd = (n: number) => `$${n.toFixed(2)}`;
 
 const STATUSES = ["pending", "paid", "filed", "completed", "processing", "failed", "abandoned"];
@@ -182,6 +188,9 @@ const AdminOrders = () => {
                     <span className="text-muted-foreground">Saved card:</span> {o.card_label ?? (o.status === "pending" ? "saved once the client pays" : "not saved")}
                     {o.state_fee_cents != null && <span className="text-muted-foreground"> · state fee due when filing {usd(o.state_fee_cents / 100)}</span>}
                   </p>
+                  {o.monthly_plan && (
+                    <p><span className="text-muted-foreground">Monthly plan:</span> {MONTHLY_NAMES[o.monthly_plan]} · <span className={o.subscription_status === "active" ? "text-foreground" : "text-destructive"}>{o.subscription_status ?? "starts once the client pays"}</span></p>
+                  )}
                   {charges?.filter((c) => c.order_id === o.id).map((c) => (
                     <p key={c.id} className="text-[13px] text-muted-foreground">
                       {c.kind.replace(/_/g, " ")} {c.period !== "formation" && c.period} · {usd(c.amount_cents / 100)} · <span className={c.status === "failed" ? "text-destructive" : "text-foreground"}>{c.status}</span>
@@ -190,7 +199,7 @@ const AdminOrders = () => {
                   ))}
                   {o.stripe_payment_method_id && (
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {CHARGE_KINDS.map((c) => (
+                      {CHARGE_KINDS.filter((c) => c.show(o)).map((c) => (
                         <Button key={c.kind} size="sm" variant={c.kind === "state_fee" ? "default" : "outline"} className="rounded-full"
                           disabled={charging !== null} onClick={() => chargeCard(o, c)}>
                           {charging === `${o.id}:${c.kind}` ? "Charging…" : `${c.label} ${usd(c.amount(o))}`}

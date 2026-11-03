@@ -1,9 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
 import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
-import { buildLineItems } from "../_shared/catalog.ts";
+import { ANNUAL_REPORT_FEE, MONTHLY_PRICES, type Monthly, buildLineItems } from "../_shared/catalog.ts";
 import { money, sendAlert } from "../_shared/alerts.ts";
-import { cardAuthorizationText } from "../_shared/card-authorization.ts";
+import { MONTHLY_NAMES, cardAuthorizationText } from "../_shared/card-authorization.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -19,6 +19,7 @@ const schema = z.object({
   plan: z.enum(["starter", "professional", "international", "business_website"]),
   entityType: z.enum(["llc", "corp"]),
   extras: z.array(z.enum(["ein", "annual_report", "registered_agent", "expedited"])).max(4).default([]),
+  monthlyPlan: z.enum(["compliance", "compliance_plus"]).nullable().default(null),
   companyName: text(120),
   altCompanyName: z.string().trim().max(120).optional().default(""),
   businessPurpose: z.string().trim().max(500).optional().default(""),
@@ -54,6 +55,25 @@ const schema = z.object({
   cardAuthorization: z.literal(true),
 });
 
+// The monthly plan's Stripe price, created the first time it's needed in each Stripe account
+// (tax settings copied from the package price so automatic tax treats them alike).
+async function monthlyPrice(stripe: ReturnType<typeof createStripeClient>, plan: Monthly, like: string) {
+  const { priceId, cents, name } = MONTHLY_PRICES[plan];
+  const found = await stripe.prices.list({ lookup_keys: [priceId], active: true, limit: 1 });
+  if (found.data[0]) return found.data[0].id;
+  const model = await stripe.prices.retrieve(like, { expand: ["product"] });
+  const taxCode = (model.product as { tax_code?: string | { id: string } | null }).tax_code;
+  const product = await stripe.products.create({
+    name,
+    ...(taxCode && { tax_code: typeof taxCode === "string" ? taxCode : taxCode.id }),
+  });
+  const price = await stripe.prices.create({
+    product: product.id, currency: "usd", unit_amount: cents, recurring: { interval: "month" },
+    lookup_key: priceId, ...(model.tax_behavior && { tax_behavior: model.tax_behavior }),
+  });
+  return price.id;
+}
+
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
@@ -65,7 +85,8 @@ Deno.serve(async (req) => {
     if (!parsed.success) return json({ error: "Please check the form and try again." }, 400);
     const d = parsed.data;
     const env = d.environment as StripeEnv;
-    const { items, extras, totalCents, stateFeeCents } = buildLineItems(d.plan, d.entityType, d.extras);
+    const monthly = d.monthlyPlan as Monthly | null;
+    const { items, extras, totalCents, stateFeeCents, monthlyCents } = buildLineItems(d.plan, d.entityType, d.extras, monthly);
 
     const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const { data: order, error } = await db.from("orders").insert({
@@ -75,7 +96,9 @@ Deno.serve(async (req) => {
       contact_name: d.contactName, contact_email: d.contactEmail, contact_phone: d.contactPhone,
       country: d.country, address: d.address, language: d.language,
       total_cents: totalCents, state_fee_cents: stateFeeCents, environment: env,
-      card_authorization: cardAuthorizationText(d.language, stateFeeCents),
+      monthly_plan: monthly,
+      card_authorization: cardAuthorizationText(d.language, stateFeeCents,
+        monthly ? { plan: monthly, cents: monthlyCents, annualFeeCents: ANNUAL_REPORT_FEE[d.entityType].cents } : undefined),
       filing: d.filing,
       ein: d.ein ?? null,
       // Authorization record (typed signature, time, IP, browser), kept as evidence of the client's consent.
@@ -94,6 +117,7 @@ Deno.serve(async (req) => {
       if (!id) throw new Error(`Price not found: ${i.priceId}`);
       return { price: id, quantity: 1 };
     });
+    if (monthly) line_items.push({ price: await monthlyPrice(stripe, monthly, line_items[0].price), quantity: 1 });
 
     const existing = await stripe.customers.list({ email: d.contactEmail, limit: 1 });
     const customer = existing.data[0]?.id ??
@@ -106,9 +130,16 @@ Deno.serve(async (req) => {
       es: `Hoy paga solo nuestro servicio. Su tarjeta queda guardada con Stripe y cobramos las tarifas estatales de Florida (${money(stateFeeCents)}) al presentar su trámite, según lo autorizó. Al pagar, acepta nuestros [Términos del servicio](https://agenteregistradofl.com/terms) y nuestra [Política de reembolsos](https://agenteregistradofl.com/refund-policy).`,
       pt: `Hoje você paga apenas nosso serviço. Seu cartão fica salvo na Stripe e cobramos as taxas estaduais da Flórida (${money(stateFeeCents)}) ao enviar seu registro, conforme autorizado. Ao pagar, você aceita nossos [Termos de serviço](https://agenteregistradofl.com/terms) e nossa [Política de reembolso](https://agenteregistradofl.com/refund-policy).`,
     }[d.language];
+    const monthlyNotice = monthly && {
+      en: ` Your ${MONTHLY_NAMES.en[monthly]} renews every month at ${money(monthlyCents)} until you cancel.`,
+      es: ` Su ${MONTHLY_NAMES.es[monthly]} se renueva cada mes por ${money(monthlyCents)} hasta que lo cancele.`,
+      pt: ` Seu ${MONTHLY_NAMES.pt[monthly]} renova todo mês por ${money(monthlyCents)} até você cancelar.`,
+    }[d.language];
+    const description = `${planName} — Florida ${d.entityType === "llc" ? "LLC" : "corporation"}: ${d.companyName}`;
     const params = {
       line_items,
-      mode: "payment",
+      // With a monthly plan, checkout starts a subscription; the package and add-ons are on its first invoice.
+      mode: monthly ? "subscription" : "payment",
       ui_mode: "embedded_page",
       return_url: d.returnUrl,
       customer,
@@ -118,14 +149,13 @@ Deno.serve(async (req) => {
       billing_address_collection: "required",
       // Cards only: the saved payment method must be chargeable later for state fees and renewals.
       payment_method_types: ["card"],
-      payment_intent_data: {
-        description: `${planName} — Florida ${d.entityType === "llc" ? "LLC" : "corporation"}: ${d.companyName}`,
-        // Keeps the card in Stripe for the state fee and renewals the client authorized.
-        setup_future_usage: "off_session",
-        metadata: { orderId: order.id },
-      },
+      // Keeps the card in Stripe for the state fee and renewals the client authorized
+      // (a subscription saves it on its own).
+      ...(monthly
+        ? { subscription_data: { description, metadata: { orderId: order.id } } }
+        : { payment_intent_data: { description, setup_future_usage: "off_session", metadata: { orderId: order.id } } }),
       metadata: { orderId: order.id },
-      custom_text: { submit: { message: termsNotice } },
+      custom_text: { submit: { message: termsNotice + (monthlyNotice || "") } },
     };
     // Tax calculation needs a business address in the payments account. Until it's set,
     // fall back to checkout without tax so customers can still pay.
@@ -145,6 +175,7 @@ Deno.serve(async (req) => {
       ["Company", d.companyName],
       ["Package", `${planName} · ${d.entityType === "llc" ? "LLC" : "Corporation"}`],
       ["Total", money(totalCents)],
+      ["Monthly plan", monthly ? `${MONTHLY_NAMES.en[monthly]} · ${money(monthlyCents)}/month` : undefined],
       ["State fee (to saved card)", money(stateFeeCents)],
       ["Name", d.contactName],
       ["Phone", d.contactPhone],

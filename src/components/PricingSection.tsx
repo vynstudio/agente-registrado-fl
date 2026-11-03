@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { PLANS, EXTRAS, money } from "@/lib/catalog";
+import { PLANS, EXTRAS, MONTHLY_PLANS, money } from "@/lib/catalog";
 const PricingSection = () => {
   const { t } = useLang();
   const [starter, professional, international, bundle] = PLANS;
@@ -197,6 +197,46 @@ const PricingSection = () => {
             </ul>
           </div>
         </motion.div>
+
+        {/* Monthly plans: optional, added at checkout, keep the company in good standing */}
+        <div className="mt-12 mb-6 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+          <div className="lg:max-w-xl">
+            <h3 className="text-xl md:text-2xl lg:text-[32px] font-medium text-foreground leading-tight">{t("Monthly plans to stay compliant")}</h3>
+          </div>
+          <p className="text-muted-foreground lg:max-w-sm lg:text-right">{t("Optional, added when you order. Covers your registered agent and annual report every year. Cancel anytime.")}</p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          {MONTHLY_PLANS.map((m, i) => (
+            <motion.div
+              key={m.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="bg-[#F7F8F7] rounded-[20px] p-2 flex flex-col"
+            >
+              <div className="bg-white rounded-[16px] p-5 mb-2" style={{ boxShadow: '0px 1px 4px rgba(12, 12, 13, 0.1), 0px 1px 4px rgba(12, 12, 13, 0.05)' }}>
+                <h3 className="text-lg font-medium text-foreground mb-1">{t(m.name)}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{t(m.tagline)}</p>
+                <div className="flex items-baseline gap-1 mb-6">
+                  <span className="text-4xl font-bold text-foreground">{money(m.price)}</span>
+                  <span className="text-muted-foreground">{t("/month")}</span>
+                </div>
+                <Button asChild variant={i ? "lime" : "outline"} className="w-full rounded-full">
+                  <Link to={`/start?monthly=${m.id}`}>{t("GET STARTED")}</Link>
+                </Button>
+              </div>
+              <ul className="space-y-3 px-3 py-4 flex-1">
+                {m.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#FF520A' }} />
+                    <span className="text-foreground">{t(feature)}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
 
         <div className="mt-8 rounded-[20px] bg-[#F7F8F7] p-5 md:p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

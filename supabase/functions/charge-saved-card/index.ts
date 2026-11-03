@@ -17,7 +17,7 @@ const corsFor = (req: Request): Record<string, string> => ({
 
 const schema = z.object({
   orderId: z.string().uuid(),
-  kind: z.enum(["state_fee", "annual_report_renewal", "registered_agent_renewal"]),
+  kind: z.enum(["state_fee", "annual_report_renewal", "registered_agent_renewal", "annual_report_state_fee"]),
 });
 
 Deno.serve(async (req) => {
@@ -48,6 +48,13 @@ Deno.serve(async (req) => {
   if (!order.card_authorization || !order.stripe_payment_method_id || !order.stripe_customer_id) {
     return json({ error: "No saved card with an authorization for this order." }, 409);
   }
+
+  // An active monthly plan already pays for our renewal services; only the state's fee is charged.
+  const onPlan = !!order.monthly_plan && order.subscription_status !== "canceled";
+  if (onPlan && (kind === "annual_report_renewal" || kind === "registered_agent_renewal")) {
+    return json({ error: "This client's monthly plan already covers that renewal." }, 409);
+  }
+  if (!onPlan && kind === "annual_report_state_fee") return json({ error: "This client has no active monthly plan." }, 409);
 
   const charge = SAVED_CARD_CHARGES[kind];
   const amount = charge.cents(order.entity_type as Entity, order.extras ?? []);

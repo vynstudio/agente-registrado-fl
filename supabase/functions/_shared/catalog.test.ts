@@ -34,3 +34,14 @@ Deno.test("Saved-card charges match the order's state fee and yearly renewals", 
   assertEquals(SAVED_CARD_CHARGES.annual_report_renewal.cents("llc", []), 11900 + 13875);
   assertEquals(SAVED_CARD_CHARGES.registered_agent_renewal.cents("corp", []), 11900);
 });
+
+Deno.test("A monthly plan adds its first month today and covers the annual report", () => {
+  const r = buildLineItems("starter", "llc", ["annual_report", "ein"], "compliance");
+  assertEquals([r.extras, r.totalCents, r.stateFeeCents, r.monthlyCents], [["ein"], 14900 + 9900 + 1900, 12500, 1900]);
+  assertEquals(buildLineItems("professional", "corp", [], "compliance_plus").totalCents, 24900 + 3900);
+});
+
+Deno.test("Monthly plan clients pay only Florida's annual report fee each year", () => {
+  assertEquals(SAVED_CARD_CHARGES.annual_report_state_fee.cents("llc", []), 13875);
+  assertEquals(SAVED_CARD_CHARGES.annual_report_state_fee.period(2027), "2027");
+});

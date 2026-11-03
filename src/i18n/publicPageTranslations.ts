@@ -227,6 +227,22 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
     "es": "Páginas relacionadas",
     "pt": "Páginas relacionadas"
   },
+  "Monthly plans": {
+    "es": "Planes mensuales",
+    "pt": "Planos mensais"
+  },
+  "Our Compliance ($19 per month) and Compliance Plus ($39 per month) plans are optional. A plan starts on the day you order, is charged to your saved card every month through Stripe, and renews until you cancel. While the plan is active it covers registered agent service and the yearly annual report filing, so the yearly renewal charges above do not apply.": {
+    "es": "Nuestros planes Cumplimiento ($19 al mes) y Cumplimiento Plus ($39 al mes) son opcionales. El plan comienza el día de su pedido, se cobra cada mes a su tarjeta guardada a través de Stripe y se renueva hasta que usted lo cancele. Mientras el plan esté activo cubre el servicio de agente registrado y la presentación del informe anual, por lo que no aplican los cobros anuales de renovación indicados arriba.",
+    "pt": "Nossos planos Conformidade ($19 por mês) e Conformidade Plus ($39 por mês) são opcionais. O plano começa no dia do pedido, é cobrado todo mês no seu cartão salvo pela Stripe e renova até você cancelar. Enquanto o plano estiver ativo, ele cobre o serviço de agente registrado e o envio do relatório anual, então as cobranças anuais de renovação acima não se aplicam."
+  },
+  "Florida's annual report fee is not included in the monthly price. We charge it to your saved card once a year when we file your annual report. Other state fees, such as those for amendments or certificates of status, are charged the same way when the service is used.": {
+    "es": "La tarifa estatal del informe anual de Florida no está incluida en el precio mensual. La cobramos a su tarjeta guardada una vez al año cuando presentamos su informe anual. Otras tarifas estatales, como las de enmiendas o certificados de estatus, se cobran de la misma forma cuando se usa el servicio.",
+    "pt": "A taxa estadual do relatório anual da Flórida não está incluída no preço mensal. Nós a cobramos no seu cartão salvo uma vez por ano quando enviamos seu relatório anual. Outras taxas estaduais, como as de alterações ou certidões de status, são cobradas da mesma forma quando o serviço é usado."
+  },
+  "You can cancel a plan at any time by calling (863) 450-1800 or through our contact page. Cancellation stops future monthly charges; months already paid are not refunded. If you cancel, registered agent service continues until the end of the current plan year, and you may renew it yearly instead.": {
+    "es": "Puede cancelar un plan en cualquier momento llamando al (863) 450-1800 o desde nuestra página de contacto. La cancelación detiene los cobros mensuales futuros; los meses ya pagados no se reembolsan. Si cancela, el servicio de agente registrado continúa hasta el final del año del plan en curso y puede renovarlo de forma anual.",
+    "pt": "Você pode cancelar um plano a qualquer momento ligando para (863) 450-1800 ou pela nossa página de contato. O cancelamento interrompe as cobranças mensais futuras; meses já pagos não são reembolsados. Se cancelar, o serviço de agente registrado continua até o fim do ano do plano em curso, e você pode renová-lo anualmente."
+  },
   "Saved card and state fees": {
     "es": "Tarjeta guardada y tarifas estatales",
     "pt": "Cartão salvo e taxas estaduais"
@@ -242,6 +258,10 @@ export const publicPageTranslations: Record<string, { es: string; pt: string }> 
   "If a charge to the saved card is declined, we will contact you before submitting the filing or renewal.": {
     "es": "Si se rechaza un cobro a la tarjeta guardada, le contactaremos antes de presentar el trámite o la renovación.",
     "pt": "Se uma cobrança no cartão salvo for recusada, entraremos em contato antes de enviar o registro ou a renovação."
+  },
+  "Updated November 3, 2026": {
+    "es": "Actualizado el 3 de noviembre de 2026",
+    "pt": "Atualizado em 3 de novembro de 2026"
   },
   "Updated October 28, 2026": {
     "es": "Actualizado el 28 de octubre de 2026",
