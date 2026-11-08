@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
-import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
+import { createStripeClient, paymentsEnv } from "../_shared/stripe.ts";
 import { ANNUAL_REPORT_FEE, MONTHLY_PRICES, type Monthly, buildLineItems } from "../_shared/catalog.ts";
 import { money, sendAlert } from "../_shared/alerts.ts";
 import { MONTHLY_NAMES, cardAuthorizationText } from "../_shared/card-authorization.ts";
@@ -12,8 +12,9 @@ const cors = {
 };
 
 const text = (max: number) => z.string().trim().min(1).max(max);
+// No "environment" field: the Stripe mode comes from server config (paymentsEnv), and any
+// value an older page still sends is dropped by the schema.
 const schema = z.object({
-  environment: z.enum(["sandbox", "live"]),
   returnUrl: z.string().url().max(500),
   language: z.enum(["en", "es", "pt"]).default("en"),
   plan: z.enum(["starter", "professional", "international", "business_website"]),
@@ -84,7 +85,7 @@ Deno.serve(async (req) => {
     const parsed = schema.safeParse(await req.json());
     if (!parsed.success) return json({ error: "Please check the form and try again." }, 400);
     const d = parsed.data;
-    const env = d.environment as StripeEnv;
+    const env = paymentsEnv();
     const monthly = d.monthlyPlan as Monthly | null;
     const { items, extras, totalCents, stateFeeCents, monthlyCents } = buildLineItems(d.plan, d.entityType, d.extras, monthly);
 

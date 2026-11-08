@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
-import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
+import { type StripeEnv, createStripeClient, paymentsEnv } from "../_shared/stripe.ts";
 import { type Entity, type SavedCardCharge, SAVED_CARD_CHARGES } from "../_shared/catalog.ts";
 import { ADMIN_ORDERS_URL, money, sendAlert } from "../_shared/alerts.ts";
 
@@ -44,6 +44,8 @@ Deno.serve(async (req) => {
 
   const { data: order } = await db.from("orders").select("*").eq("id", orderId).maybeSingle();
   if (!order) return json({ error: "Order not found" }, 404);
+  // Saved cards are charged only in the mode this backend runs in (a test order on production is never charged).
+  if (order.environment !== paymentsEnv()) return json({ error: "This is a test order; it can't be charged here." }, 409);
   if (!["paid", "filed", "completed"].includes(order.status)) return json({ error: "The order isn't paid yet." }, 409);
   if (!order.card_authorization || !order.stripe_payment_method_id || !order.stripe_customer_id) {
     return json({ error: "No saved card with an authorization for this order." }, 409);

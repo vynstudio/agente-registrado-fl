@@ -8,6 +8,13 @@ const getEnv = (key: string): string => {
 
 export type StripeEnv = 'sandbox' | 'live';
 
+// The Stripe mode this backend runs in, decided only by server config (the PAYMENTS_ENV function
+// secret), never by the browser. Anything other than "sandbox" means live, so production is live
+// by default and a visitor can't start a test-mode checkout that gets marked paid.
+export function paymentsEnv(): StripeEnv {
+  return Deno.env.get('PAYMENTS_ENV')?.trim().toLowerCase() === 'sandbox' ? 'sandbox' : 'live';
+}
+
 // Secret keys of the business's own Stripe account (sk_test_... / sk_live_...).
 export function getStripeSecretKey(env: StripeEnv): string {
   return env === 'sandbox'
@@ -22,7 +29,7 @@ export function createStripeClient(env: StripeEnv): Stripe {
   });
 }
 
-export async function verifyWebhook(req: Request, env: StripeEnv): Promise<{ type: string; data: { object: any } }> {
+export async function verifyWebhook(req: Request, env: StripeEnv): Promise<{ type: string; livemode: boolean; data: { object: any } }> {
   const signature = req.headers.get("stripe-signature");
   const body = await req.text();
   const secret = env === 'sandbox'
