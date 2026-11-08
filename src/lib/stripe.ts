@@ -11,6 +11,8 @@ function paymentsEnvironment(): StripeEnv {
   );
 }
 
+// The browser only needs the publishable key; which Stripe mode an order uses is decided by the
+// server (PAYMENTS_ENV), so the key's mode must match that secret.
 let stripePromise: Promise<Stripe | null> | null = null;
 
 export function getStripe(): Promise<Stripe | null> {
@@ -19,8 +21,4 @@ export function getStripe(): Promise<Stripe | null> {
     stripePromise = loadStripe(clientToken as string);
   }
   return stripePromise;
-}
-
-export function getStripeEnvironment(): StripeEnv {
-  return paymentsEnvironment();
 }

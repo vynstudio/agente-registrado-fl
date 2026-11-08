@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
-import { type StripeEnv, createStripeClient, verifyWebhook } from "../_shared/stripe.ts";
+import { type StripeEnv, createStripeClient, paymentsEnv, verifyWebhook } from "../_shared/stripe.ts";
 import { ADMIN_ORDERS_URL, money, sendAlert } from "../_shared/alerts.ts";
 import { sendOrderConfirmation } from "../_shared/client-email.ts";
 
@@ -77,13 +77,19 @@ async function setStatus(session: any, env: StripeEnv, status: string) {
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
-  const rawEnv = new URL(req.url).searchParams.get("env");
-  if (rawEnv !== "sandbox" && rawEnv !== "live") {
-    return new Response(JSON.stringify({ received: true, ignored: "invalid env" }), { status: 200 });
+  // Only the endpoint for the mode this backend runs in (PAYMENTS_ENV) is processed, so in
+  // production a test-mode event can never touch an order.
+  const env: StripeEnv = paymentsEnv();
+  if (new URL(req.url).searchParams.get("env") !== env) {
+    return new Response(JSON.stringify({ received: true, ignored: "other payments environment" }), { status: 200 });
   }
-  const env: StripeEnv = rawEnv;
   try {
     const event = await verifyWebhook(req, env);
+    // Signed with this mode's secret, but double-check Stripe's own flag: a test event never updates a live order.
+    if (event.livemode !== (env === "live")) {
+      console.warn("Ignored webhook event whose livemode does not match", env);
+      return new Response(JSON.stringify({ received: true, ignored: "livemode mismatch" }), { status: 200 });
+    }
     const s = event.data.object;
     switch (event.type) {
       case "checkout.session.completed":

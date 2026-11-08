@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLang } from "@/i18n/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { ANNUAL_REPORT_FEE, EXTRAS, INCLUDED, MONTHLY_PLANS, PLANS, STATE_FEE, includedWith, money, orderTotal, type Entity, type Extra, type Monthly, type Plan } from "@/lib/catalog";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { ACTIVITIES, ROLES, SUFFIXES, TAX_ID_CHOICES, fullCompanyName } from "@/lib/filing";
@@ -127,7 +127,6 @@ const Start = () => {
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: {
-          environment: getStripeEnvironment(),
           returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
           language: lang, plan, entityType: entity, extras: chosen, monthlyPlan: monthly,
           companyName: fullCompanyName(form.companyName, nameEnding, entity),

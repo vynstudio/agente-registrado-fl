@@ -20,8 +20,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const checkAdminRole = async (userId: string) => {
-    // First signed-in user while no admin exists becomes the admin (no-op otherwise).
-    await (supabase.rpc as any)("claim_first_admin");
     const { data, error } = await supabase
       .from("user_roles")
       .select("role")
